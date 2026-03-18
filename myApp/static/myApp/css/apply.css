@@ -1,0 +1,106 @@
+/* Reset */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Page background */
+body{
+  background:#f4f6f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+/* Main container */
+.apply-container{
+  background:white;
+  width:500px;
+  padding:40px;
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.apply-container h1{
+  text-align:center;
+  margin-bottom:10px;
+  color:#222;
+}
+
+/* Job title */
+.apply-container h2{
+  text-align:center;
+  font-size:16px;
+  margin-bottom:5px;
+  color:#666;
+}
+
+.apply-container h3{
+  text-align:center;
+  margin-bottom:25px;
+  color:#0077cc;
+}
+
+/* Form layout */
+form{
+  display:flex;
+  flex-direction:column;
+}
+
+/* Labels */
+label{
+  margin-bottom:5px;
+  font-weight:bold;
+  color:#333;
+}
+
+/* Inputs */
+input,
+textarea{
+  padding:10px;
+  margin-bottom:18px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:14px;
+  transition:0.3s;
+}
+
+/* Input focus effect */
+input:focus,
+textarea:focus{
+  border-color:#0077cc;
+  outline:none;
+  box-shadow:0 0 5px rgba(0,119,204,0.2);
+}
+
+/* Submit button */
+button{
+  padding:12px;
+  background:#0077cc;
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+/* Hover effect */
+button:hover{
+  background:#005fa3;
+}
+
+/* Responsive */
+@media(max-width:600px){
+
+.apply-container{
+  width:90%;
+  padding:30px;
+}
+
+}

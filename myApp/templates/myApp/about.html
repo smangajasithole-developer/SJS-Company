@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/about.css' %}">
+  <script src="{% static 'myApp/js/about.js' %}"></script>
+
+
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <i class="fas fa-truck"></i> SJS Company
+  </div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'careers' %}">Careers</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+<!-- User Menu -->
+<li class="user-menu">
+  <div class="user-circle" onclick="toggleMenu()">
+    <i class="fas fa-user"></i>
+  </div>
+
+  <ul class="dropdown-menu" id="userDropdown">
+    <li><a href="{% url 'profile' %}">Profile</a></li> 
+    <li><a href="{% url 'notifications' %}">Notifications</a></li>
+    <li><a href="{% url 'inbox' %}">Inbox</a></li>
+    <li><a href="{% url 'settings' %}">Settings</a></li>
+    <li><a href="{% url 'feedback' %}">Feedback</a></li>
+    <li><a href="{% url 'help' %}">Help</a></li>
+    <li><a href="{% url 'signin' %}">Sign In</a></li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="tagline">OUR STORY</p>
+        <h1>About SJS Company</h1>
+      </div>
+    </div>
+  </section>
+
+<!-- Company History Section -->
+<section class="history">
+  <div class="history-container">
+    <!-- Left: Narrative -->
+    <div class="history-text">
+      <h2 class="section-title">COMPANY HISTORY</h2>
+      <h3 class="section-subtitle">Built on Dedication Since 2016</h3>
+      <p>
+        SJS Company was founded in 2016 by Samuel J. Sithole with a single truck and a vision to improve goods transportation in South Africa.
+      </p>
+      <p>
+        From humble beginnings in Gauteng, we expanded to Limpopo and Mpumalanga, building a reputation for speed, safety, and professionalism.
+      </p>
+      <p>
+        Today, we operate a fleet of over 50 vehicles, employ more than 200 professionals, and have successfully completed over 10,000 deliveries.
+      </p>
+    </div>
+
+    <!-- Right: Timeline -->
+    <div class="history-timeline">
+      <ul>
+        <li><span class="year">2016</span> Founded in Johannesburg, Gauteng</li>
+        <li><span class="year">2018</span> Expanded to Limpopo & Mpumalanga</li>
+        <li><span class="year">2020</span> Fleet reached 25 vehicles</li>
+        <li><span class="year">2023</span> Launched real-time tracking system</li>
+        <li><span class="year">2025</span> 50+ vehicles & 200 employees</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Vision Section -->
+<section class="mission-vision">
+  <div class="mission">
+    <h2>Our Mission</h2>
+    <p>
+      To provide fast, reliable, and secure goods transportation that empowers businesses across South Africa to grow without limits.
+    </p>
+  </div>
+
+  <div class="vision">
+    <h2>Our Vision</h2>
+    <p>
+      To become South Africa's leading logistics partner — known for innovation, reliability, and excellence in every delivery.
+    </p>
+  </div>
+</section>
+
+<!-- Leadership Section -->
+<section class="leadership">
+  <div class="leadership-container">
+    <h2 class="section-title">LEADERSHIP</h2>
+    <h3 class="section-subtitle">Meet The Team</h3>
+
+    <div class="team-grid">
+      <!-- Team Member 1 -->
+      <div class="team-card">
+      <img src="{% static 'myApp/images/Chief Executive Officer.png' %}" alt="Chief Executive Officer">
+        <h4>Smanga J. Sithole</h4>
+        <p class="role">Chief Executive Officer</p>
+        <p class="bio">20+ years in logistics. Founder and visionary behind SJS Company.</p>
+      </div>
+
+      <!-- Team Member 2 -->
+      <div class="team-card">
+      <img src="{% static 'myApp/images/Operations Manager.jpg' %}" alt="TruOperations Managerck">
+        <h4>Nomsa Dlamini</h4>
+        <p class="role">Operations Manager</p>
+        <p class="bio">Expert in supply chain optimization and fleet coordination.</p>
+      </div>
+
+      <!-- Team Member 3 -->
+      <div class="team-card">
+      <img src="{% static 'myApp/images/HR Manager.jpg' %}" alt="HR Manager">
+        <h4>Beauty Mokoena</h4>
+        <p class="role">HR Manager</p>
+        <p class="bio">Passionate about building high-performing, diverse logistics teams.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Core Values Section -->
+<section class="values">
+  <div class="values-container">
+    <h2 class="section-title">WHAT WE STAND FOR</h2>
+    <h3 class="section-subtitle">Our Core Values</h3>
+
+    <div class="values-grid">
+      <div class="value-box">
+        <i class="fas fa-shield-alt"></i>
+        <h4>Integrity</h4>
+        <p>We operate with transparency and honesty in every delivery.</p>
+      </div>
+
+      <div class="value-box">
+        <i class="fas fa-bolt"></i>
+        <h4>Efficiency</h4>
+        <p>Speed and precision are at the heart of every operation.</p>
+      </div>
+
+      <div class="value-box">
+        <i class="fas fa-star"></i>
+        <h4>Safety</h4>
+        <p>Driver and cargo safety is never compromised.</p>
+      </div>
+
+      <div class="value-box">
+        <i class="fas fa-lightbulb"></i>
+        <h4>Innovation</h4>
+        <p>We embrace technology to lead the logistics industry.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+
+
+
+
+
+
+</body>
+</html>

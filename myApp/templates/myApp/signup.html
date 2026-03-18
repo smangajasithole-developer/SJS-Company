@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SJS Company - Create Account</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/signup.css' %}">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-truck"></i> <span class="orange">SJS</span> <span class="blue">Company</span>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+        <li><a href="#" class="active">Sign In</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<!-- Sign Up Section -->
+<section class="signup">
+  <div class="signup-container">
+    <div class="signup-icon">
+      <i class="fas fa-truck"></i>
+    </div>
+
+    <h2>Create an Account</h2>
+    <p class="subtitle">Join SJS Company today — it's free</p>
+
+    <form class="signup-form" method="POST">
+      {% csrf_token %}
+      <input type="text" name="firstname" placeholder="Name(s)" required>
+      <input type="text" name="lastname" placeholder="Surname" required>
+      <input type="email" name="email" placeholder="Email (Will be your username)" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+      <button type="submit" class="btn-signup">Create Account</button>
+    </form>
+
+    <p class="terms">
+      By creating an account you agree to our <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a>.
+    </p>
+
+    <div class="extra-links">
+      <p>Already have an account? <a href="{% url 'signin' %}">Sign in →</a></p>
+    </div>
+  </div>
+</section>
+
+  
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+
+
+</body>
+</html>

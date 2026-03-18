@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/contact.css' %}">
+  <script src="{% static 'myApp/js/contact.js' %}"></script>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <i class="fas fa-truck"></i> SJS Company
+  </div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'careers' %}">Careers</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+<!-- User Menu -->
+<li class="user-menu">
+  <div class="user-circle" onclick="toggleMenu()">
+    <i class="fas fa-user"></i>
+  </div>
+
+  <ul class="dropdown-menu" id="userDropdown">
+    <li><a href="{% url 'profile' %}">Profile</a></li> 
+    <li><a href="{% url 'notifications' %}">Notifications</a></li>
+    <li><a href="{% url 'inbox' %}">Inbox</a></li>
+    <li><a href="{% url 'settings' %}">Settings</a></li>
+    <li><a href="{% url 'feedback' %}">Feedback</a></li>
+    <li><a href="{% url 'help' %}">Help</a></li>
+    <li><a href="{% url 'signin' %}">Sign In</a></li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="tagline">GET IN TOUCH</p>
+        <h1>Contact SJS Company</h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Information Boxes -->
+<section class="contact-info-boxes">
+  <div class="info-grid">
+    <!-- Box 1 -->
+    <div class="info-box">
+      <h3>CALL US</h3>
+      <p>+27 11 234 5678</p>
+      <p>Mon – Fri, 8AM – 5PM SAST</p>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="info-box">
+      <h3>EMAIL US</h3>
+      <p>info@sjscompany.co.za</p>
+      <p>We reply within 24 hours</p>
+    </div>
+
+    <!-- Box 3 -->
+    <div class="info-box">
+      <h3>HEAD OFFICE</h3>
+      <p>14 Commerce Street, Sandton</p>
+      <p>Johannesburg, Gauteng, 2196</p>
+    </div>
+
+    <!-- Box 4 -->
+    <div class="info-box">
+      <h3>OFFICE HOURS</h3>
+      <p>Monday – Friday</p>
+      <p>08:00 AM – 05:00 PM SAST</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- Map and Contact Form Section -->
+<section class="map-contact">
+  <div class="map-contact-container">
+    <!-- Left: Map + Address -->
+    <div class="map-box">
+      <!-- Google Maps Embed -->
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.123456789!2d28.0567!3d-26.1075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95123456789abc%3A0xabcdef123456789!2s14%20Commerce%20Street%2C%20Sandton%2C%20Johannesburg%2C%20Gauteng%2C%202196!5e0!3m2!1sen!2sza!4v1700000000000"
+        width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+      <p class="map-address">
+        📍 14 Commerce Street, Sandton, Johannesburg, Gauteng, 2196
+      </p>
+    </div>
+
+    <!-- Right: Contact Form -->
+    <div class="form-box">
+      <h2>Send a Message</h2>
+      <form>
+        <input type="text" name="fullname" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="subject" placeholder="Subject" required>
+        <textarea name="message" rows="5" placeholder="Your message..." required></textarea>
+        <button type="submit" class="btn-submit">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

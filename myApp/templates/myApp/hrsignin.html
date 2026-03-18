@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SJS Company - HR Portal Login</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/hrsignin.css' %}">  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <!-- Back to Website -->
+  <div class="back-link">
+    <a href="{% url 'home' %}">← Back to Website</a>
+  </div>
+
+  <!-- HR Portal Section -->
+  <section class="hrsignin">
+    <div class="hrsignin-container">
+      <!-- Header -->
+      <div class="hr-header">
+        <i class="fas fa-lock"></i>
+        <h2>SJS Company</h2>
+        <p class="portal-label">HR Internal Portal</p>
+      </div>
+
+      <!-- Warning -->
+      <div class="warning-box">
+        <p><strong>Restricted Access.</strong> This portal is for authorized HR personnel only. All activity is monitored and logged.</p>
+      </div>
+
+      <!-- Login Form -->
+      <form class="hr-form">
+        <input type="email" name="hr-email" placeholder="HR Email" value="hr@sjscompany.co.za" required>
+        <div class="password-row">
+          <input type="password" name="password" placeholder="Password" required>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-login">Login to HR Portal</button>
+      </form>
+
+      <!-- Demo Info -->
+      <p class="demo">Demo: hr@sjscompany.co.za / SJS@2026</p>
+
+      <!-- Extra Link -->
+      <div class="extra-links">
+        <p>Not HR staff? <a href="{% url 'signin' %}">Go to regular Sign In →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 SJS Company. All rights reserved.</p>
+  </footer>
+</body>
+</html>

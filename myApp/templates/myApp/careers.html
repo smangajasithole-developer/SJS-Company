@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers at SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/careers.css' %}">
+  <script src="{% static 'myApp/js/careers.js' %}"></script>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <i class="fas fa-truck"></i> SJS Company
+  </div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'careers' %}">Careers</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+<!-- User Menu -->
+<li class="user-menu">
+  <div class="user-circle" onclick="toggleMenu()">
+    <i class="fas fa-user"></i>
+  </div>
+
+  <ul class="dropdown-menu" id="userDropdown">
+    <li><a href="{% url 'profile' %}">Profile</a></li> 
+    <li><a href="{% url 'notifications' %}">Notifications</a></li>
+    <li><a href="{% url 'inbox' %}">Inbox</a></li>
+    <li><a href="{% url 'settings' %}">Settings</a></li>
+    <li><a href="{% url 'feedback' %}">Feedback</a></li>
+    <li><a href="{% url 'help' %}">Help</a></li>
+    <li><a href="{% url 'signin' %}">Sign In</a></li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="tagline">JOIN THE TEAM</p>
+        <h1>Careers at SJS Company</h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- Careers Introduction -->
+<section class="careers-intro">
+  <div class="careers-container">
+    <h2 class="section-title">Build Your Career With Us</h2>
+    <p class="careers-text">
+      Join our growing logistics team and be part of something that moves South Africa forward. 
+      We offer competitive salaries, growth opportunities, and a supportive work environment.
+    </p>
+  </div>
+</section>
+
+
+<!-- Job Listings Section -->
+<section class="jobs">
+  <div class="jobs-container">
+    <h2 class="section-title">Open Positions</h2>
+
+<div class="job-grid">
+  <!-- Job 1 -->
+  <div class="job-card">
+    <div class="job-info">
+      <h3>Truck Driver (Class EC)</h3>
+      <p><strong>Location:</strong> Johannesburg, GP</p>
+      <p><strong>Employment Type:</strong> Full-time</p>
+      <p><strong>Salary:</strong> R18,000 – R24,000/mo</p>
+      <p><strong>Requirements:</strong> EC License, 3+ yrs exp</p>
+    </div>
+
+    <div class="job-action">
+      <form action="{% url 'apply' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="job_title" value="Truck Driver (Class EC)">
+        <button type="submit" class="btn-apply">View & Apply</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Job 2 -->
+<div class="job-card">
+  <div class="job-info">
+    <h3>Warehouse Supervisor</h3>
+    <p><strong>Location:</strong> Pretoria, GP</p>
+    <p><strong>Employment Type:</strong> Full-time</p>
+    <p><strong>Salary:</strong> R22,000 – R30,000/mo</p>
+    <p><strong>Requirements:</strong> Logistics, Leadership</p>
+  </div>
+
+  <div class="job-action">
+    <form action="{% url 'apply' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="job_title" value="Warehouse Supervisor">
+      <button type="submit" class="btn-apply">View & Apply</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Job 3 -->
+<div class="job-card">
+  <div class="job-info">
+    <h3>Fleet Coordinator</h3>
+    <p><strong>Location:</strong> Polokwane, LP</p>
+    <p><strong>Employment Type:</strong> Full-time</p>
+    <p><strong>Salary:</strong> R20,000 – R26,000/mo</p>
+    <p><strong>Requirements:</strong> Fleet, GPS Systems</p>
+  </div>
+
+  <div class="job-action">
+    <form action="{% url 'apply' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="job_title" value="Fleet Coordinator">
+      <button type="submit" class="btn-apply">View & Apply</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Job 4 -->
+<div class="job-card">
+  <div class="job-info">
+    <h3>HR Administrator</h3>
+    <p><strong>Location:</strong> Johannesburg, GP</p>
+    <p><strong>Employment Type:</strong> Full-time</p>
+    <p><strong>Salary:</strong> R18,000 – R22,000/mo</p>
+    <p><strong>Categories:</strong> HR, Recruitment</p>
+  </div>
+
+  <div class="job-action">
+    <form action="{% url 'apply' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="job_title" value="HR Administrator">
+      <button type="submit" class="btn-apply">View & Apply</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Job 5 -->
+<div class="job-card">
+  <div class="job-info">
+    <h3>Delivery Driver (Code 10)</h3>
+    <p><strong>Location:</strong> Nelspruit, MP</p>
+    <p><strong>Employment Type:</strong> Contract</p>
+    <p><strong>Salary:</strong> R14,000 – R18,000/mo</p>
+    <p><strong>Categories:</strong> Code 10, Local</p>
+  </div>
+
+  <div class="job-action">
+    <form action="{% url 'apply' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="job_title" value="Delivery Driver (Code 10)">
+      <button type="submit" class="btn-apply">View & Apply</button>
+    </form>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="careers.html" class="active">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

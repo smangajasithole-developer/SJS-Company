@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> SJS Company - Logistics </title>
+  <link rel="stylesheet" href="{% static 'myApp/css/home.css' %}">
+  <script src="{% static 'myApp/js/home.js' %}"></script>
+
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <i class="fas fa-truck"></i> SJS Company
+  </div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'careers' %}">Careers</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+<!-- User Menu -->
+<li class="user-menu">
+  <div class="user-circle" onclick="toggleMenu()">
+    <i class="fas fa-user"></i>
+  </div>
+
+  <ul class="dropdown-menu" id="userDropdown">
+    <li><a href="{% url 'profile' %}">Profile</a></li> 
+    <li><a href="{% url 'notifications' %}">Notifications</a></li>
+    <li><a href="{% url 'inbox' %}">Inbox</a></li>
+    <li><a href="{% url 'settings' %}">Settings</a></li>
+    <li><a href="{% url 'feedback' %}">Feedback</a></li>
+    <li><a href="{% url 'help' %}">Help</a></li>
+    <li><a href="{% url 'signin' %}">Sign In</a></li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <i class="fas fa-truck hero-icon"></i>
+      <h1>SJS COMPANY</h1>
+      <p class="subtitle">Reliable Logistics &amp; Goods Transportation</p>
+      <p class="coverage">Across South Africa — Gauteng, Limpopo, Mpumalanga and beyond.</p>
+      <div class="hero-buttons">
+        <a href="{% url 'contact' %}" class="btn btn-orange">Get a Quote</a>
+        <a  href="{% url 'careers' %}" class="btn btn-white">View Careers</a>
+      </div>
+    </div>
+  </section>
+
+
+<!-- About Section -->
+<section id="about" class="about">
+  <div class="about-container">
+
+    <!-- LEFT SIDE -->
+    <div class="about-text">
+      <h2 class="section-title">ABOUT US</h2>
+      <h3 class="section-subtitle">South Africa's Trusted Logistics Partner</h3>
+
+      <p>
+        SJS Company has been connecting businesses with reliable goods transportation for over 8 years. 
+        Operating across Gauteng, Limpopo, and Mpumalanga, we've built a reputation for speed, safety, and professionalism.
+      </p>
+
+      <p>
+        From small business deliveries to large corporate contracts, our experienced team and modern fleet are ready to keep your supply chain moving.
+      </p>
+
+      <a href="#services" class="read-more">Read More →</a>
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+    <div class="stats">
+      <img src="{% static 'myApp/images/truck3.png' %}" alt="Truck" class="stats-bg">
+
+      <div class="stat-box">
+        <h4>8+</h4>
+        <p>Years</p>
+      </div>
+
+      <div class="stat-box">
+        <h4>50+</h4>
+        <p>Vehicles</p>
+      </div>
+
+      <div class="stat-box">
+        <h4>10K+</h4>
+        <p>Deliveries</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- Services Section -->
+<section id="services" class="services">
+  <div class="services-container">
+    <h2 class="section-title">WHAT WE DO</h2>
+    <h3 class="section-subtitle">Our Services</h3>
+
+    <div class="service-grid">
+      <div class="service-box">
+        <i class="fas fa-box"></i>
+        <h4>Goods Transportation</h4>
+        <p>Safe and timely delivery across all major South African provinces.</p>
+      </div>
+
+      <div class="service-box">
+        <i class="fas fa-warehouse"></i>
+        <h4>Warehouse Management</h4>
+        <p>Secure storage, inventory tracking and organised logistics hubs.</p>
+      </div>
+
+      <div class="service-box">
+        <i class="fas fa-truck-moving"></i>
+        <h4>Fleet Management</h4>
+        <p>Full fleet oversight with real-time GPS and maintenance scheduling.</p>
+      </div>
+
+      <div class="service-box">
+        <i class="fas fa-shipping-fast"></i>
+        <h4>Same-Day Delivery</h4>
+        <p>Urgent deliveries handled with speed and professionalism.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Us Section -->
+<section id="whyus" class="whyus">
+  <div class="whyus-container">
+    <h2 class="section-title">WHY US</h2>
+    <h3 class="section-subtitle">Why Choose SJS Company</h3>
+
+    <div class="whyus-grid">
+      <div class="whyus-box">
+        <i class="fas fa-truck"></i>
+        <h4>Reliable Fleet</h4>
+        <p>Modern, well-maintained trucks ready for any route.</p>
+      </div>
+
+      <div class="whyus-box">
+        <i class="fas fa-id-card"></i>
+        <h4>Experienced Drivers</h4>
+        <p>Licensed, background-checked professional drivers.</p>
+      </div>
+
+      <div class="whyus-box">
+        <i class="fas fa-map-marker-alt"></i>
+        <h4>Real-Time Tracking</h4>
+        <p>Live GPS tracking for every delivery.</p>
+      </div>
+
+      <div class="whyus-box">
+        <i class="fas fa-headset"></i>
+        <h4>24/7 Support</h4>
+        <p>Our team is always available to assist you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
+

@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SJS Company - Services</title>
+  <link rel="stylesheet" href="services.css">
+  <link rel="stylesheet" href="{% static 'myApp/css/services.css' %}">
+  <script src="{% static 'myApp/js/services.js' %}"></script>
+
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <i class="fas fa-truck"></i> SJS Company
+  </div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'careers' %}">Careers</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+<!-- User Menu -->
+<li class="user-menu">
+  <div class="user-circle" onclick="toggleMenu()">
+    <i class="fas fa-user"></i>
+  </div>
+
+  <ul class="dropdown-menu" id="userDropdown">
+    <li><a href="{% url 'profile' %}">Profile</a></li> 
+    <li><a href="{% url 'notifications' %}">Notifications</a></li>
+    <li><a href="{% url 'inbox' %}">Inbox</a></li>
+    <li><a href="{% url 'settings' %}">Settings</a></li>
+    <li><a href="{% url 'feedback' %}">Feedback</a></li>
+    <li><a href="{% url 'help' %}">Help</a></li>
+    <li><a href="{% url 'signin' %}">Sign In</a></li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="tagline">WHAT WE OFFER</p>
+        <h1>Our Services</h1>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Transportation Services -->
+<section class="service-section">
+  <h2>01 Transportation Services</h2>
+  <div class="service-grid">
+    <div class="service-box">
+      <i class="fas fa-map-marker-alt"></i>
+      <h4>Local Delivery</h4>
+      <p>Fast, same-city deliveries with real-time GPS tracking.</p>
+    </div>
+    <div class="service-box">
+      <i class="fas fa-truck"></i>
+      <h4>Interprovincial Transport</h4>
+      <p>Reliable long-haul logistics between Gauteng, Limpopo & Mpumalanga.</p>
+    </div>
+    <div class="service-box">
+      <i class="fas fa-chart-bar"></i>
+      <h4>Fleet Tracking</h4>
+      <p>Live updates on every vehicle in our fleet for full transparency.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Warehouse Services -->
+<section class="service-section">
+  <h2>02 Warehouse Services</h2>
+  <div class="service-grid">
+    <div class="service-box">
+      <i class="fas fa-boxes"></i>
+      <h4>Inventory Management</h4>
+      <p>Digital stock control and real-time inventory monitoring.</p>
+    </div>
+    <div class="service-box">
+      <i class="fas fa-warehouse"></i>
+      <h4>Storage Solutions</h4>
+      <p>Short and long-term warehousing in secure, climate-controlled facilities.</p>
+    </div>
+    <div class="service-box">
+      <i class="fas fa-box-open"></i>
+      <h4>Packaging</h4>
+      <p>Professional packing to ensure goods arrive safe and undamaged.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Corporate Logistics Solutions -->
+<section class="service-section">
+  <h2>03 Corporate Logistics Solutions</h2>
+  <div class="service-grid">
+    <div class="service-box">
+      <i class="fas fa-file-alt"></i>
+      <h4>Bulk Transportation</h4>
+      <p>High-volume cargo movement for manufacturers and retailers.</p>
+    </div>
+    <div class="service-box">
+      <i class="fas fa-box"></i>
+      <h4>Scheduled Contracts</h4>
+      <p>Ongoing logistics contracts tailored to your business cycle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Request a Quote Section -->
+<section id="quote" class="quote">
+  <div class="quote-container">
+    <h2 class="section-title">GET STARTED</h2>
+    <h3 class="section-subtitle">Request a Quote</h3>
+    <p class="quote-intro">
+      Tell us your logistics needs and we'll get back to you within 24 hours.
+    </p>
+
+<form class="quote-form" method="POST">
+  {% csrf_token %}
+
+  <div class="form-row">
+    <input type="text" name="fullname" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+  </div>
+
+  <div class="form-row">
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+  </div>
+
+  <div class="form-row">
+    <select name="service" required>
+      <option value="">Select a Service</option>
+      <option value="Transportation Services">Transportation Services</option>
+      <option value="Warehouse Services">Warehouse Services</option>
+      <option value="Corporate Logistics Solutions">Corporate Logistics Solutions</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <textarea name="needs" rows="5" placeholder="Describe your logistics needs..." required></textarea>
+  </div>
+
+  <button type="submit" class="btn-submit">Submit Request →</button>
+</form>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Info -->
+    <div class="footer-box">
+      <h3>SJS Company</h3>
+      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="services.html" class="active">Services</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-box">
+      <h4>Services</h4>
+      <ul>
+        <li>Goods Transportation</li>
+        <li>Warehouse Management</li>
+        <li>Fleet Management</li>
+        <li>Same-Day Delivery</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> +27 11 234 5678</p>
+      <p><strong>Email:</strong> info@sjscompany.co.za</p>
+      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
+
+
+</body>
+</html>

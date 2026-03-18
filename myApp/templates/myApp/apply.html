@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Apply for Job</title>
+<link rel="stylesheet" href="{% static 'myApp/css/apply.css' %}">
+</head>
+
+<body>
+
+<div class="apply-container">
+
+<h1>Job Application</h1>
+
+{% if job_title %}
+<h2>Applying for:</h2>
+<h3 style="color:#0077cc;">{{ job_title }}</h3>
+{% endif %}
+
+<form method="POST">
+{% csrf_token %}
+
+<input type="hidden" name="job_title" value="{{ job_title }}">
+
+<label>Full Name</label>
+<input type="text" name="fullname" required>
+
+<label>Email</label>
+<input type="email" name="email" required>
+
+<label>Phone</label>
+<input type="text" name="phone" required>
+
+<label>Cover Letter</label>
+<textarea name="cover_letter" rows="5"></textarea>
+
+<button type="submit">Submit Application</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
