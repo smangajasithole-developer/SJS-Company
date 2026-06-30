@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ job.job_title|default:"Job Info" }} | SJS Company</title>
+
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="{% static 'myApp/css/jobinfo.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- HEADER / NAVIGATION -->
+    <!-- ============================================================ -->
+    <header class="navbar">
+        <div class="logo">
+            <i class="fas fa-truck"></i>
+            <span class="company-name">SJS Company</span>
+        </div>
+
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'careers' %}">Careers</a></li>
+                <li><a href="#" class="active">Job Info</a></li>
+                <li class="user-menu">
+                    <div class="user-circle" onclick="toggleUserMenu()" aria-expanded="false">
+                        {% if user.is_authenticated %}
+                            {{ user.first_name|first }}{{ user.last_name|first }}
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                    </div>
+                    <ul class="dropdown-menu" id="userDropdown" role="menu">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'profile' %}" role="menuitem">Profile</a></li>
+                            <li><a href="{% url 'signout' %}" role="menuitem">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}" role="menuitem">Sign In</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <main class="job-details">
+
+        {% if job %}
+            <!-- Job Header -->
+            <div class="job-header">
+                <h1>{{ job.job_title }}</h1>
+                <h3>{{ job.company_name }}</h3>
+
+                <div class="job-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ job.location }}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-briefcase"></i>
+                        {{ job.job_type }} | {{ job.work_hours }}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        {{ job.stipend }}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        Published: {{ job.publish_date|date:"Y/m/d" }}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-calendar-times"></i>
+                        Closing: {{ job.closing_date|date:"Y/m/d" }}
+                    </span>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Messages -->
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {% if message.tags == "success" %}
+                                <i class="fas fa-check-circle"></i>
+                            {% elif message.tags == "warning" %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% elif message.tags == "error" %}
+                                <i class="fas fa-times-circle"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle"></i>
+                            {% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Apply Button -->
+            <div class="apply-section">
+                {% if user.is_authenticated %}
+                    {% if already_applied %}
+                        <button type="button" class="apply-btn applied-btn" disabled>
+                            <i class="fas fa-check-circle"></i>
+                            You already applied for this position
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'apply_job' job.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="apply-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Apply For This Position
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'signin' %}?next={{ request.path }}" class="apply-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In To Apply
+                    </a>
+                {% endif %}
+            </div>
+
+            <hr>
+
+            <!-- Job Description -->
+            <section class="job-description">
+                <h2>Job Description</h2>
+
+                {% for c in job.contents.all %}
+                    <div class="content-block">
+                        {% if c.title_level == "H2" %}
+                            <h3>{{ c.topic_title }}</h3>
+                        {% else %}
+                            <h4>{{ c.topic_title }}</h4>
+                        {% endif %}
+
+                        {% if c.description %}
+                            {% if c.format_type == "bullet" %}
+                                <ul>
+                                    {% for line in c.description.splitlines %}
+                                        {% if line %}
+                                            <li>{{ line }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>{{ c.description }}</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="empty-message">No job description available.</p>
+                {% endfor %}
+            </section>
+
+            <!-- Apply Button (Bottom) -->
+            <hr>
+            <div class="apply-section">
+                {% if user.is_authenticated %}
+                    {% if already_applied %}
+                        <button type="button" class="apply-btn applied-btn" disabled>
+                            <i class="fas fa-check-circle"></i>
+                            You already applied for this position
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'apply_job' job.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="apply-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Apply For This Position
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'signin' %}?next={{ request.path }}" class="apply-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In To Apply
+                    </a>
+                {% endif %}
+            </div>
+
+        {% else %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>Job not found.</p>
+            </div>
+        {% endif %}
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-box">
+                <h3>SJS Company</h3>
+                <p>Reliable logistics & goods transportation across South Africa.</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'services' %}">Services</a></li>
+                    <li><a href="{% url 'careers' %}">Careers</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-box">
+                <h4>Services</h4>
+                <ul>
+                    <li>Goods Transportation</li>
+                    <li>Warehouse Management</li>
+                    <li>Fleet Management</li>
+                    <li>Same-Day Delivery</li>
+                </ul>
+            </div>
+
+            <div class="footer-box">
+                <h4>Contact</h4>
+                <p><i class="fas fa-phone"></i> +27 11 234 5678</p>
+                <p><i class="fas fa-envelope"></i> info@sjscompany.co.za</p>
+                <p><i class="fas fa-map-marker-alt"></i> Johannesburg, Gauteng</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 SJS Company. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT - External File -->
+    <!-- ============================================================ -->
+    <script src="{% static 'myApp/js/jobinfo.js' %}"></script>
+</body>
+</html>

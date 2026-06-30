@@ -1,0 +1,419 @@
+/* ===============================================
+   CLASSIC ADMIN HERO PHOTOS UI - SJS COMPANY
+   =============================================== */
+
+/* ---------- RESET & BASE ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    background: #eef2f7;
+    color: #1a2a3a;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* ========== TOPBAR STYLES ========== */
+.admin-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    font-weight: 500;
+}
+
+.topbar-left {
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 6px 16px;
+    border-radius: 40px;
+}
+
+.topbar-center {
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 24px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-center i {
+    font-size: 1.1rem;
+}
+
+.topbar-right {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-right::before {
+    content: "👤";
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ========== LAYOUT WRAPPER ========== */
+.admin-layout {
+    display: flex;
+    margin-top: 64px;
+    min-height: calc(100vh - 64px);
+}
+
+/* ========== SIDEBAR STYLES ========== */
+.sidebar {
+    width: 270px;
+    background: #1e2e3e;
+    color: #e2e8f0;
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    box-shadow: 3px 0 15px rgba(0, 0, 0, 0.06);
+    z-index: 99;
+}
+
+.sidebar-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 28px 20px 20px 26px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 20px;
+    color: #f0f4f8;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px 12px 26px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.sidebar a i {
+    width: 24px;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #8da3b5;
+}
+
+.sidebar a:hover {
+    background: #2a3e52;
+    color: white;
+    border-left-color: #e67e22;
+}
+
+.sidebar a:hover i {
+    color: #e67e22;
+}
+
+.sidebar a.active {
+    background: #2a3e52;
+    color: white;
+    border-left-color: #e67e22;
+    font-weight: 600;
+}
+
+.sidebar a.active i {
+    color: #e67e22;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #1e2e3e;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #e67e22;
+    border-radius: 6px;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+    flex: 1;
+    margin-left: 270px;
+    padding: 40px 45px;
+    background: #f4f8fc;
+    min-height: calc(100vh - 64px);
+}
+
+/* ========== ADMIN CARD ========== */
+.admin-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    padding: 35px 40px;
+    border: 1px solid #e2edf2;
+}
+
+.admin-card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #e67e22;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-card h2 i {
+    color: #e67e22;
+    font-size: 1.6rem;
+}
+
+/* ========== HERO GRID ========== */
+.hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.hero-item {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e2edf2;
+    transition: all 0.2s ease;
+}
+
+.hero-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #cbdde6;
+}
+
+.hero-item h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e67e22;
+    display: inline-block;
+}
+
+/* ========== HERO IMAGE ========== */
+.hero-image {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2edf2;
+}
+
+.hero-image img {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-image {
+    text-align: center;
+    color: #94a3b8;
+}
+
+.no-image i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.no-image p {
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* ========== FORM STYLES ========== */
+.hero-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.hero-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px dashed #cbdbe0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    background: white;
+    cursor: pointer;
+}
+
+.hero-form input[type="file"]:hover {
+    background: #f1f5f9;
+    border-color: #e67e22;
+}
+
+/* ========== BUTTON GROUP ========== */
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.btn-group button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-update {
+    background: linear-gradient(135deg, #2c5282 0%, #1a3a5c 100%);
+    color: white;
+}
+
+.btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #1a3a5c 0%, #0f2a44 100%);
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-group button:active {
+    transform: translateY(0);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 30px 35px;
+    }
+    
+    .hero-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 260px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 25px 20px;
+    }
+    
+    .admin-card {
+        padding: 20px 24px;
+    }
+    
+    .admin-card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .topbar-left {
+        font-size: 0.9rem;
+        padding: 4px 12px;
+    }
+    
+    .topbar-center {
+        font-size: 1rem;
+        padding: 4px 16px;
+    }
+    
+    .topbar-right {
+        font-size: 0.85rem;
+        padding: 4px 12px;
+    }
+    
+    .admin-topbar {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 20px 15px;
+    }
+    
+    .admin-card {
+        padding: 18px 20px;
+    }
+    
+    .admin-card h2 {
+        font-size: 1.3rem;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .hero-image {
+        min-height: 180px;
+    }
+}

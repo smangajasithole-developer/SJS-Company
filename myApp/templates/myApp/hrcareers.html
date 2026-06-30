@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Careers - SJS Company</title>
+
+  <link rel="stylesheet" href="{% static 'myApp/css/hrcareers.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>HR Panel</h2>
+
+    <a href="{% url 'hrdashboard' %}" class="{% if request.resolver_match.url_name == 'hrdashboard' %}active{% endif %}">
+      <i class="fas fa-chart-line"></i> Dashboard
+    </a>
+
+    <a href="{% url 'hrcareers' %}" class="{% if request.resolver_match.url_name == 'hrcareers' %}active{% endif %}">
+      <i class="fas fa-briefcase"></i> Careers
+    </a>
+
+    <a href="" class="{% if request.resolver_match.url_name == 'hrapplications' %}active{% endif %}">
+      <i class="fas fa-file-alt"></i> Applications
+    </a>
+
+    <a href="" class="{% if request.resolver_match.url_name == 'hrusers' %}active{% endif %}">
+      <i class="fas fa-users"></i> Users
+    </a>
+
+    <a href="{% url 'signout' %}">
+      <i class="fas fa-sign-out-alt"></i> Sign Out
+    </a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Manage Jobs</h1>
+
+    <!-- ========================= -->
+    <!-- ADD NEW JOB -->
+    <!-- ========================= -->
+    <div class="admin-card">
+      <h2>Add New Job</h2>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <label>Job Position *</label>
+        <input type="text" name="job_position" placeholder="e.g., Truck Driver" required>
+
+        <label>Company Name *</label>
+        <input type="text" name="company_name" placeholder="e.g., SJS Company" required>
+
+        <label>City, Province or Country *</label>
+        <input type="text" name="location" placeholder="e.g., Johannesburg, GP" required>
+
+        <label>Job Type *</label>
+        <select name="job_type" required>
+          <option value="Fixed">Fixed</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Remote">Remote</option>
+          <option value="Internship">Internship</option>
+        </select>
+
+        <label>Work Hours *</label>
+        <select name="work_hours" required>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+        </select>
+
+        <label>Stipend / Salary *</label>
+        <input type="text" name="stipend" placeholder="e.g., R20,000/month" required>
+
+        <label>Closing Date *</label>
+        <input type="date" name="closing_date" required>
+
+        <button type="submit" name="add_job">Add Job</button>
+      </form>
+    </div>
+
+    <!-- ========================= -->
+    <!-- ADD / UPDATE JOB DETAILS -->
+    <!-- ========================= -->
+    <div class="admin-card">
+      <h2>Add / Update Job Details</h2>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <label>Select Job *</label>
+        <select name="job_id" required>
+          <option value="">-- Choose Job by Position --</option>
+          {% for job in jobs %}
+            <option value="{{ job.id }}">{{ job.job_position }}</option>
+          {% endfor %}
+        </select>
+
+        <label>Opening Title Level *</label>
+        <select name="opening_title_level" required>
+          <option value="H1">H1</option>
+          <option value="H2">H2</option>
+        </select>
+
+        <label>Opening Title Text *</label>
+        <input type="text" name="opening_title_text" placeholder="e.g., About the Role" required>
+
+        <label>Content Type *</label>
+        <select name="content_type" required>
+          <option value="H2">H2</option>
+          <option value="H3">H3</option>
+          <option value="H4">H4</option>
+        </select>
+
+        <label>Content Format *</label>
+        <select name="format_type" required>
+          <option value="paragraph">Paragraph</option>
+          <option value="bullet">Bullet Points</option>
+        </select>
+
+        <label>Content *</label>
+        <textarea name="content_text" placeholder="Enter paragraph or bullet points (one per line for bullets)" required></textarea>
+
+        <button type="submit" name="add_update_job">Add / Update</button>
+      </form>
+    </div>
+
+<!-- ========================= -->
+<!-- EXISTING JOBS -->
+<!-- ========================= -->
+<div class="admin-card">
+  <h2>Existing Jobs (Private)</h2>
+
+  {% for job in jobs %}
+    <div class="job-box">
+      <h3>{{ job.job_position }} - {{ job.company_name }}</h3>
+      <p><strong>{{ job.job_type }} | {{ job.work_hours }} | {{ job.location }}</strong></p>
+      <p>Stipend / Salary: {{ job.stipend }}</p>
+      <p>Published: {{ job.date_published }} | Closing: {{ job.closing_date }}</p>
+
+      <!-- Job Contents -->
+      {% with job.jobcontent_set.all as contents %}
+        {% if contents %}
+          <div class="job-content">
+            {% for content in contents %}
+              {% if content.opening_title_text %}
+                <{{ content.opening_title_level }}>{{ content.opening_title_text }}</{{ content.opening_title_level }}>
+              {% endif %}
+
+              {% if content.format_type == 'paragraph' %}
+                <p>{{ content.content_text }}</p>
+              {% elif content.format_type == 'bullet' %}
+                <ul>
+                  {% for line in content.content_text.splitlines %}
+                    <li>{{ line }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+    </div>
+  {% empty %}
+    <p>No jobs available yet.</p>
+  {% endfor %}
+</div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            HR Dashboard - SJS Company
+        {% endblock %}
+    </title>
+
+    <!-- ===== EXTERNAL CSS ===== -->
+    <link rel="stylesheet" href="{% static 'myApp/css/hrapplicants.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ============================================================ -->
+    <!--  TOP BAR                                                      -->
+    <!-- ============================================================ -->
+    <div class="admin-topbar">
+
+        <div class="topbar-left">
+            {{ header.company_name|default:"SJS Company" }}
+        </div>
+
+        <div class="topbar-center">
+            <i class="fas fa-users"></i>
+        </div>
+
+        <div class="topbar-right">
+            {% if user.is_authenticated %}
+                {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+                HR User
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  DASHBOARD CONTAINER                                          -->
+    <!-- ============================================================ -->
+    <div class="dashboard-container">
+
+        <!-- ========================================================== -->
+        <!--  SIDEBAR                                                    -->
+        <!-- ========================================================== -->
+        <div class="sidebar">
+
+            <h2 class="sidebar-title">HR Panel</h2>
+
+            <a href="{% url 'hrdashboard' %}" class="{% if request.resolver_match.url_name == 'hrdashboard' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'hrapplicants' %}" class="{% if request.resolver_match.url_name == 'hrapplicants' %}active{% endif %}">
+                <i class="fas fa-users"></i>
+                <span>Applicants</span>
+            </a>
+
+            <a href="{% url 'hrapplications' %}" class="{% if request.resolver_match.url_name == 'hrapplications' %}active{% endif %}">
+                <i class="fas fa-file-lines"></i>
+                <span>Applications</span>
+            </a>
+
+            <a href="{% url 'hraccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'hraccepted_candidate' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i>
+                <span>Listed / Accepted Candidates</span>
+            </a>
+
+            <a href="{% url 'hrrejected_candidate' %}" class="{% if request.resolver_match.url_name == 'hrrejected_candidate' %}active{% endif %}">
+                <i class="fas fa-user-times"></i>
+                <span>Rejected Candidates</span>
+            </a>
+
+            <a href="#" class="{% if request.resolver_match.url_name == 'hrinterviews' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i>
+                <span>Interviews</span>
+            </a>
+
+            <a href="#" class="{% if request.resolver_match.url_name == 'hroffers' %}active{% endif %}">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>Offers</span>
+            </a>
+
+            <a href="{% url 'signout' %}">
+                <i class="fas fa-right-from-bracket"></i>
+                <span>Sign Out</span>
+            </a>
+
+        </div>
+
+        <!-- ========================================================== -->
+        <!--  CONTENT WRAPPER                                            -->
+        <!-- ========================================================== -->
+        <div class="content-wrapper">
+
+            <div class="main-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Welcome HR Team</h1>
+                    <p>
+                        Manage applicants, applications,
+                        interviews, offers and hiring decisions.
+                    </p>
+                </div>
+
+                <!-- Applicants Section -->
+                <section class="applicants-section">
+                    <h2>Applicants</h2>
+
+                    <table class="applicants-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Applications</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for applicant in applicants %}
+                                <tr>
+                                    <td>{{ applicant.first_name }} {{ applicant.last_name }}</td>
+                                    <td>{{ applicant.email }}</td>
+                                    <td>{{ applicant.application_count }}</td>
+                                    <td>
+                                        <button type="button" class="view-profile-btn" onclick="openApplicantProfile('{{ applicant.id }}')">
+                                            <i class="fas fa-eye"></i>
+                                            View Profile
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">No applicants found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  PROFILE MODAL                                                -->
+    <!-- ============================================================ -->
+    <div id="applicantProfileModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <span class="close-profile" onclick="closeApplicantProfile()">&times;</span>
+            <div id="profileContent">
+                <div class="loading-profile">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Loading profile...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  JAVASCRIPT (external)                                        -->
+    <!-- ============================================================ -->
+    <script src="{% static 'myApp/js/hrapplicants.js' %}" defer></script>
+
+</body>
+</html>

@@ -30,15 +30,37 @@
         <p><strong>Restricted Access.</strong> This portal is for authorized HR personnel only. All activity is monitored and logged.</p>
       </div>
 
+
+
+
+      
       <!-- Login Form -->
-      <form class="hr-form">
-        <input type="email" name="hr-email" placeholder="HR Email" value="hr@sjscompany.co.za" required>
-        <div class="password-row">
-          <input type="password" name="password" placeholder="Password" required>
-          <a href="#" class="forgot-link">Forgot password?</a>
-        </div>
-        <button type="submit" class="btn-login">Login to HR Portal</button>
-      </form>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="error">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+
+
+
+
+<form class="hr-form" method="POST">
+  {% csrf_token %}
+
+  <input type="email" name="email" placeholder="HR Email" required>
+
+  <div class="password-row">
+    <input type="password" name="password" placeholder="Password" required>
+    <a href="#" class="forgot-link">Forgot password?</a>
+  </div>
+
+  <button type="submit" class="btn-login">Login to HR Portal</button>
+</form>
 
       <!-- Demo Info -->
       <p class="demo">Demo: hr@sjscompany.co.za / SJS@2026</p>

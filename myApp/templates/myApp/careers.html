@@ -6,237 +6,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Careers at SJS Company</title>
   <link rel="stylesheet" href="{% static 'myApp/css/careers.css' %}">
-  <script src="{% static 'myApp/js/careers.js' %}"></script>
-
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+
 <!-- Header -->
 <header class="navbar">
   <div class="logo">
-    <i class="fas fa-truck"></i> SJS Company
+    <div class="logo-circle">
+      {% if header.logo %}
+        <img src="{{ header.logo.url }}" alt="Logo">
+      {% endif %}
+    </div>
+    <span class="company-name">{{ header.company_name|default:"" }}</span>
   </div>
 
   <nav>
     <ul class="nav-links">
-      <li><a href="{% url 'home' %}">Home</a></li>
-      <li><a href="{% url 'about' %}">About</a></li>
-      <li><a href="{% url 'services' %}">Services</a></li>
-      <li><a href="{% url 'careers' %}">Careers</a></li>
-      <li><a href="{% url 'contact' %}">Contact</a></li>
-
-<!-- User Menu -->
-<li class="user-menu">
-  <div class="user-circle" onclick="toggleMenu()">
-    <i class="fas fa-user"></i>
-  </div>
-
-  <ul class="dropdown-menu" id="userDropdown">
-    <li><a href="{% url 'profile' %}">Profile</a></li> 
-    <li><a href="{% url 'notifications' %}">Notifications</a></li>
-    <li><a href="{% url 'inbox' %}">Inbox</a></li>
-    <li><a href="{% url 'settings' %}">Settings</a></li>
-    <li><a href="{% url 'feedback' %}">Feedback</a></li>
-    <li><a href="{% url 'help' %}">Help</a></li>
-    <li><a href="{% url 'signin' %}">Sign In</a></li>
-  </ul>
-</li>
+      <li><a href="{% url 'home' %}" class="tab-btn">Home</a></li>
+      <li><a href="{% url 'about' %}" class="tab-btn">About</a></li>
+      <li><a href="{% url 'services' %}" class="tab-btn">Services</a></li>
+      <li><a href="{% url 'careers' %}" class="tab-btn active">Careers</a></li>
+      <li><a href="{% url 'contact' %}" class="tab-btn">Contact</a></li>
+      <li class="user-menu">
+        <div class="user-circle" onclick="toggleMenu()">
+          {% if user.is_authenticated %}
+            {{ user.first_name|first }}{{ user.last_name|first }}
+          {% else %}
+            <i class="fas fa-user"></i>
+          {% endif %}
+        </div>
+        <ul class="dropdown-menu" id="userDropdown">
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+          {% else %}
+            <li><a href="{% url 'signin' %}">Sign In</a></li>
+          {% endif %}
+        </ul>
+      </li>
     </ul>
   </nav>
 </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-overlay">
-      <div class="hero-content">
-        <p class="tagline">JOIN THE TEAM</p>
-        <h1>Careers at SJS Company</h1>
+<!-- Hero Section -->
+<section class="hero"
+  {% if hero_photos.careers and hero_photos.careers.image %}
+    style="background: url('{{ hero_photos.careers.image.url }}') center/cover no-repeat;"
+  {% endif %}
+>
+  <div class="hero-overlay">
+    <div class="hero-content">
+      <p class="tagline">{{ careers_main.tagline }}</p>
+      <h1>{{ careers_main.hero_title }}</h1>
+    </div>
+  </div>
+</section>
+
+<!-- Intro Section -->
+<section class="careers-intro">
+  <div class="container">
+    <div class="intro-content">
+      <h2 class="section-title">{{ careers_main.intro_title }}</h2>
+      <div class="intro-text">
+        <p>{{ careers_main.intro_text }}</p>
       </div>
     </div>
-  </section>
-
-  <!-- Careers Introduction -->
-<section class="careers-intro">
-  <div class="careers-container">
-    <h2 class="section-title">Build Your Career With Us</h2>
-    <p class="careers-text">
-      Join our growing logistics team and be part of something that moves South Africa forward. 
-      We offer competitive salaries, growth opportunities, and a supportive work environment.
-    </p>
   </div>
 </section>
 
-
-<!-- Job Listings Section -->
+<!-- Jobs Section -->
 <section class="jobs">
-  <div class="jobs-container">
-    <h2 class="section-title">Open Positions</h2>
-
-<div class="job-grid">
-  <!-- Job 1 -->
-  <div class="job-card">
-    <div class="job-info">
-      <h3>Truck Driver (Class EC)</h3>
-      <p><strong>Location:</strong> Johannesburg, GP</p>
-      <p><strong>Employment Type:</strong> Full-time</p>
-      <p><strong>Salary:</strong> R18,000 – R24,000/mo</p>
-      <p><strong>Requirements:</strong> EC License, 3+ yrs exp</p>
+  <div class="container">
+    <div class="jobs-header">
+      <h2 class="section-title">{{ careers_main.open_positions_title }}</h2>
+      <p class="jobs-subtitle">Join our team and grow your career with us</p>
     </div>
 
-    <div class="job-action">
-      <form action="{% url 'apply' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="job_title" value="Truck Driver (Class EC)">
-        <button type="submit" class="btn-apply">View & Apply</button>
-      </form>
-    </div>
+    <div class="job-grid">
+      {% for job in jobs %}
+        <div class="job-card">
+          <div class="job-header">
+            <h3>{{ job.job_title }}</h3>
+            <span class="job-badge {{ job.job_type|lower }}">{{ job.job_type }} | {{ job.work_hours }}</span>
+          </div>
 
-  </div>
-</div>
+          <div class="job-details">
+            <div class="job-info-row">
+              <div class="job-info-item">
+                <i class="fas fa-building"></i>
+                <span>{{ job.company_name }}</span>
+              </div>
+              <div class="job-info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ job.location }}</span>
+              </div>
+            </div>
+            <div class="job-info-row">
+              <div class="job-info-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>{{ job.stipend|default:"Competitive" }}</span>
+              </div>
+              <div class="job-info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Posted: {{ job.publish_date|date:"M d, Y" }}</span>
+              </div>
+            </div>
+            <div class="job-info-row">
+              <div class="job-info-item">
+                <i class="fas fa-calendar-times"></i>
+                <span>Closing: {{ job.closing_date|date:"M d, Y" }}</span>
+              </div>
+            </div>
+          </div>
 
-<!-- Job 2 -->
-<div class="job-card">
-  <div class="job-info">
-    <h3>Warehouse Supervisor</h3>
-    <p><strong>Location:</strong> Pretoria, GP</p>
-    <p><strong>Employment Type:</strong> Full-time</p>
-    <p><strong>Salary:</strong> R22,000 – R30,000/mo</p>
-    <p><strong>Requirements:</strong> Logistics, Leadership</p>
-  </div>
+          <div class="job-preview">
+            <div class="preview-content">
+              {% for c in job.contents.all|slice:":2" %}
+                <div class="preview-block">
+                  {% if c.title_level == "H2" %}
+                    <h4>{{ c.topic_title }}</h4>
+                  {% else %}
+                    <h5>{{ c.topic_title }}</h5>
+                  {% endif %}
+                  {% if c.description %}
+                    {% if c.format_type == "bullet" %}
+                      <ul class="preview-list">
+                        {% for line in c.description.splitlines|slice:":3" %}
+                          {% if line %}
+                            <li>{{ line }}</li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      <p>{{ c.description|truncatewords:25 }}</p>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              {% endfor %}
+              {% if job.contents.count > 2 %}
+                <p class="more-indicator">+ {{ job.contents.count|add:"-2" }} more section(s)</p>
+              {% endif %}
+            </div>
+          </div>
 
-  <div class="job-action">
-    <form action="{% url 'apply' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="job_title" value="Warehouse Supervisor">
-      <button type="submit" class="btn-apply">View & Apply</button>
-    </form>
-  </div>
-</div>
-
-
-<!-- Job 3 -->
-<div class="job-card">
-  <div class="job-info">
-    <h3>Fleet Coordinator</h3>
-    <p><strong>Location:</strong> Polokwane, LP</p>
-    <p><strong>Employment Type:</strong> Full-time</p>
-    <p><strong>Salary:</strong> R20,000 – R26,000/mo</p>
-    <p><strong>Requirements:</strong> Fleet, GPS Systems</p>
-  </div>
-
-  <div class="job-action">
-    <form action="{% url 'apply' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="job_title" value="Fleet Coordinator">
-      <button type="submit" class="btn-apply">View & Apply</button>
-    </form>
-  </div>
-</div>
-
-
-<!-- Job 4 -->
-<div class="job-card">
-  <div class="job-info">
-    <h3>HR Administrator</h3>
-    <p><strong>Location:</strong> Johannesburg, GP</p>
-    <p><strong>Employment Type:</strong> Full-time</p>
-    <p><strong>Salary:</strong> R18,000 – R22,000/mo</p>
-    <p><strong>Categories:</strong> HR, Recruitment</p>
-  </div>
-
-  <div class="job-action">
-    <form action="{% url 'apply' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="job_title" value="HR Administrator">
-      <button type="submit" class="btn-apply">View & Apply</button>
-    </form>
-  </div>
-</div>
-
-
-<!-- Job 5 -->
-<div class="job-card">
-  <div class="job-info">
-    <h3>Delivery Driver (Code 10)</h3>
-    <p><strong>Location:</strong> Nelspruit, MP</p>
-    <p><strong>Employment Type:</strong> Contract</p>
-    <p><strong>Salary:</strong> R14,000 – R18,000/mo</p>
-    <p><strong>Categories:</strong> Code 10, Local</p>
-  </div>
-
-  <div class="job-action">
-    <form action="{% url 'apply' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="job_title" value="Delivery Driver (Code 10)">
-      <button type="submit" class="btn-apply">View & Apply</button>
-    </form>
-  </div>
-</div>
-
-
+          <div class="job-footer">
+            <a href="{% url 'jobinfo' job.id %}" class="btn-readmore">
+              Read More <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-jobs">
+          <i class="fas fa-briefcase"></i>
+          <p>No jobs available right now. Please check back later.</p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
-
-
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-container">
-    <!-- Company Info -->
     <div class="footer-box">
-      <h3>SJS Company</h3>
-      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+      <h3>{{ footer.company_name|default:"" }}</h3>
+      <p>{{ footer.description|default:"" }}</p>
     </div>
-
-    <!-- Quick Links -->
     <div class="footer-box">
       <h4>Quick Links</h4>
       <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
         <li><a href="{% url 'services' %}">Services</a></li>
-        <li><a href="careers.html" class="active">Careers</a></li>
+        <li><a href="{% url 'careers' %}">Careers</a></li>
         <li><a href="{% url 'contact' %}">Contact</a></li>
       </ul>
     </div>
-
-    <!-- Services -->
     <div class="footer-box">
       <h4>Services</h4>
       <ul>
-        <li>Goods Transportation</li>
-        <li>Warehouse Management</li>
-        <li>Fleet Management</li>
-        <li>Same-Day Delivery</li>
+        {% for item in footer_services %}
+          <li>{{ item.title }}</li>
+        {% empty %}
+        {% endfor %}
       </ul>
     </div>
-
-    <!-- Contact -->
     <div class="footer-box">
       <h4>Contact</h4>
-      <p><strong>Phone:</strong> +27 11 234 5678</p>
-      <p><strong>Email:</strong> info@sjscompany.co.za</p>
-      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
+      {% for item in footer_contacts %}
+        <p>
+          <strong>{{ item.title }}:</strong>
+          {% if item.link %}
+            <a href="{{ item.link }}">{{ item.description }}</a>
+          {% else %}
+            {{ item.description }}
+          {% endif %}
+        </p>
+      {% empty %}
+      {% endfor %}
     </div>
   </div>
-
   <div class="footer-bottom">
-    <p>© 2026 SJS Company. All rights reserved.</p>
+    <p>© 2026 {{ footer.company_name|default:"" }}. All rights reserved.</p>
     <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
   </div>
 </footer>
 
-
-
-
-
-
-
-
-
-
-
+<script src="{% static 'myApp/js/careers.js' %}"></script>
 </body>
 </html>

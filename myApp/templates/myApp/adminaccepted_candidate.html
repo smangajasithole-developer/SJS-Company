@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accepted Candidates - Admin</title>
+
+  <link rel="stylesheet" href="{% static 'myApp/css/adminaccepted_candidate.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-user-check"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="dashboard-container">
+
+  <!-- ================= SIDEBAR ================= -->
+  <div class="sidebar">
+
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+
+  </div>
+
+  <!-- ================= CONTENT ================= -->
+  <div class="content-wrapper">
+
+    <div class="main-content">
+
+      <h1>Accepted / Listed Candidates</h1>
+
+      <table border="1">
+
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Job</th>
+          <th>Date Applied</th>
+          <th>Action</th>
+        </tr>
+
+        {% for application in listed_candidates %}
+
+        <tr>
+          <td>{{ application.user.first_name }} {{ application.user.last_name }}</td>
+          <td>{{ application.user.email }}</td>
+          <td>{{ application.job.job_title }}</td>
+          <td>{{ application.date_applied }}</td>
+
+          <td>
+            <button type="button" class="view-application-btn" onclick="openApplicationView('{{ application.id }}')">
+              <i class="fas fa-eye"></i>
+              View Application
+            </button>
+          </td>
+
+        {% empty %}
+        <tr>
+          <td colspan="5">No accepted candidates found.</td>
+        </tr>
+
+        {% endfor %}
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- APPLICATION MODAL -->
+<div id="applicationModal" class="profile-modal">
+  <div class="profile-modal-content">
+    <span class="close-profile" onclick="closeApplicationView()">&times;</span>
+    <div id="applicationContent">
+      <div class="loading-profile">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading application...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENT VIEWER MODAL -->
+<div id="documentViewerModal" class="document-modal">
+  <div class="document-modal-content">
+    <div class="document-header">
+      <h3 id="documentTitle">Document Viewer</h3>
+      <span class="close-document" onclick="closeDocumentViewer()">&times;</span>
+    </div>
+    <div class="document-body">
+      <object id="documentFrame" type="application/pdf"></object>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'myApp/js/adminaccepted_candidate.js' %}" defer></script>
+
+</body>
+</html>

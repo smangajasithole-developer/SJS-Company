@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Header - SJS Company</title>
+
+  <link rel="stylesheet" href="{% static 'myApp/css/adminheader.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {% if header and header.logo %}
+      <img src="{{ header.logo.url }}" alt="Logo" style="height:40px;">
+    {% endif %}
+
+    {{ header.company_name|default:"" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-window-maximize"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+
+<!-- ================= LAYOUT WRAPPER ================= -->
+<div class="admin-layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+
+  </aside>
+
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="admin-content">
+
+    <div class="admin-card">
+
+      <h2>
+        <i class="fas fa-window-maximize"></i>
+        Header Settings
+      </h2>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Company Name</label>
+        <input type="text" name="company_name" value="{{ header.company_name }}">
+
+        <label>Logo</label>
+        <input type="file" name="logo">
+
+        {% if header.logo %}
+          <div class="preview">
+            <img src="{{ header.logo.url }}" alt="Logo">
+          </div>
+        {% endif %}
+
+        <button type="submit" name="update_header">
+          Save Changes
+        </button>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

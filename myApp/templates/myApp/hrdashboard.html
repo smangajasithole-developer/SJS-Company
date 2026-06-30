@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HR Dashboard - SJS Company{% endblock %}</title>
+
+    <!-- ===== CSS (external file) ===== -->
+    <link rel="stylesheet" href="{% static 'myApp/css/hrdashboard.css' %}">
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ========================================= -->
+    <!-- TOP BAR (rearranged side: left / center / right) -->
+    <!-- ========================================= -->
+    <div class="admin-topbar">
+
+        <div class="topbar-left">
+            {{ header.company_name|default:"SJS Company" }}
+        </div>
+
+        <div class="topbar-center">
+            <i class="fas fa-users"></i>
+        </div>
+
+        <div class="topbar-right">
+            {% if user.is_authenticated %}
+                {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+                HR User
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- DASHBOARD CONTAINER (sidebar + content)   -->
+    <!-- ========================================= -->
+    <div class="dashboard-container">
+
+        <!-- ===== SIDEBAR (rearranged side: fixed left) ===== -->
+        <div class="sidebar">
+
+            <h2 class="sidebar-title">HR Panel</h2>
+
+            <a href="{% url 'hrdashboard' %}" class="{% if request.resolver_match.url_name == 'hrdashboard' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'hrapplicants' %}" class="{% if request.resolver_match.url_name == 'hrapplicants' %}active{% endif %}">
+                <i class="fas fa-users"></i>
+                <span>Applicants</span>
+            </a>
+
+            <a href="{% url 'hrapplications' %}" class="{% if request.resolver_match.url_name == 'hrapplications' %}active{% endif %}">
+                <i class="fas fa-file-lines"></i>
+                <span>Applications</span>
+            </a>
+
+            <a href="{% url 'hraccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'hraccepted_candidate' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i>
+                <span>Listed / Accepted Candidates</span>
+            </a>
+
+            <a href="{% url 'hrrejected_candidate' %}" class="{% if request.resolver_match.url_name == 'hrrejected_candidate' %}active{% endif %}">
+                <i class="fas fa-user-times"></i>
+                <span>Rejected Candidates</span>
+            </a>
+
+            <a href="#" class="{% if request.resolver_match.url_name == 'hrinterviews' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i>
+                <span>Interviews</span>
+            </a>
+
+            <a href="#" class="{% if request.resolver_match.url_name == 'hroffers' %}active{% endif %}">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>Offers</span>
+            </a>
+
+            <a href="{% url 'signout' %}">
+                <i class="fas fa-right-from-bracket"></i>
+                <span>Sign Out</span>
+            </a>
+
+        </div>
+
+        <!-- ===== CONTENT WRAPPER (right side) ===== -->
+        <div class="content-wrapper">
+
+            <div class="main-content">
+                {% block content %}
+                    <h1>Welcome HR Team</h1>
+                    <p>
+                        Manage applicants, applications,
+                        interviews, offers and hiring decisions.
+                    </p>
+                {% endblock %}
+            </div>
+
+        </div> <!-- /content-wrapper -->
+
+    </div> <!-- /dashboard-container -->
+
+    <!-- ========================================= -->
+    <!-- JAVASCRIPT (external file)               -->
+    <!-- ========================================= -->
+    <script src="{% static 'myApp/js/hrdashboard.js' %}"></script>
+
+</body>
+</html>

@@ -1,5 +1,55 @@
+# =========================
+# Python
+# =========================
 __pycache__/
-*.pyc
-db.sqlite3
+*.py[cod]
+*$py.class
+
+# Virtual environments
+myVenv/
 venv/
+env/
+ENV/
+
+# =========================
+# Django
+# =========================
+
+# SQLite databases
+db.sqlite3
+*.sqlite3
+
+# Environment variables
 .env
+.env.*
+
+# Django static files
+staticfiles/
+
+# Media uploads (stored separately in production)
+media/
+
+# =========================
+# IDE / Editors
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# OS generated files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Temporary files
+# =========================
+
+*.swp
+*.swo
+*.log
+
+# Windows crash files
+bash.exe.stackdump

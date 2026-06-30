@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Hero Photos - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/adminherophotos.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-image"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-image"></i>
+        Hero Photos Manager
+      </h2>
+
+      <div class="hero-grid">
+        {% for hero in hero_photos %}
+        <div class="hero-item">
+          <h3>{{ hero.page|title }} Page</h3>
+
+          <div class="hero-image">
+            {% if hero.image %}
+              <img src="{{ hero.image.url }}" alt="{{ hero.page }}">
+            {% else %}
+              <div class="no-image">
+                <i class="fas fa-image"></i>
+                <p>No image uploaded</p>
+              </div>
+            {% endif %}
+          </div>
+
+          <form method="POST" enctype="multipart/form-data" class="hero-form">
+            {% csrf_token %}
+            <input type="hidden" name="page" value="{{ hero.page }}">
+            <input type="file" name="image" id="image_{{ hero.page }}">
+            
+            <div class="btn-group">
+              <button type="submit" name="update_image" class="btn-update">
+                <i class="fas fa-upload"></i>
+                Update
+              </button>
+              <button type="submit" name="delete_image" class="btn-delete" onclick="return confirm('Are you sure you want to delete this hero image?');">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="{% static 'myApp/js/adminherophotos.js' %}"></script>
+</body>
+</html>

@@ -1,298 +1,630 @@
-/* Reset */
+/* ============================================================
+   SIGN IN PAGE STYLES
+   Following SJS Company Theme
+   ============================================================ */
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Body */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f9f9f9;
-  color: #333;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+    background: #f4f6f9;
+    color: #2c3e50;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 50px;
-  background: rgba(0, 0, 0, 0.8);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.logo .orange {
-  color: #e67e22;
-}
-
-.logo .blue {
-  color: #3498db;
-}
-
-.logo i {
-  margin-right: 8px;
-  color: #e67e22;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  color: #e67e22;
-}
-
-/* Sign In Section */
-.signin {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding-top: 80px; /* offset for fixed navbar */
+/* ============================================================
+   SIGN IN SECTION
+   ============================================================ */
+.signin-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 5%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
 }
 
 .signin-container {
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem 3rem;
+    max-width: 440px;
+    width: 100%;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.signin-icon {
-  background: #f1c40f;
-  color: #000;
-  font-size: 2rem;
-  padding: 15px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-bottom: 20px;
+.signin-container:hover {
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
 }
 
-.signin-container h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #222;
+/* Icon */
+.signin-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
 }
 
-.subtitle {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 30px;
+.signin-icon-wrapper i {
+    font-size: 2rem;
+    color: white;
 }
 
+/* Header */
+.signin-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.signin-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0a2540;
+    margin-bottom: 0.25rem;
+}
+
+.signin-subtitle {
+    font-size: 0.95rem;
+    color: #5a6e8a;
+}
+
+/* Messages */
+.messages-container {
+    margin-bottom: 1.5rem;
+}
+
+.message {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideDown 0.3s ease;
+}
+
+.message i {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.message-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.message-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.message-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form */
 .signin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.signin-form input {
-  padding: 12px 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
-.signin-form input:focus {
-  outline: 2px solid #e67e22;
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.password-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.form-group label i {
+    color: #f39c12;
+    font-size: 0.9rem;
 }
 
-.password-row input {
-  flex: 1;
+.form-control {
+    padding: 0.7rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    font-family: inherit;
+    background: #fafbfc;
+    width: 100%;
 }
 
-.forgot-link {
-  font-size: 0.9rem;
-  color: #3498db;
-  text-decoration: none;
+.form-control:focus {
+    outline: none;
+    border-color: #f39c12;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.1);
 }
 
-.forgot-link:hover {
-  text-decoration: underline;
+.form-control::placeholder {
+    color: #9ca3af;
+}
+
+/* Password Input */
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper .form-control {
+    padding-right: 3rem;
 }
 
 .toggle-password {
-  cursor: pointer;
-  color: #888;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    transition: color 0.2s;
 }
 
+.toggle-password:hover {
+    color: #0a2540;
+}
+
+.password-options {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+}
+
+.forgot-link {
+    font-size: 0.8rem;
+    color: #5a6e8a;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.forgot-link i {
+    font-size: 0.75rem;
+}
+
+.forgot-link:hover {
+    color: #f39c12;
+}
+
+/* Sign In Button */
 .btn-signin {
-  background: #e67e22;
-  color: #fff;
-  font-weight: bold;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+    width: 100%;
 }
 
 .btn-signin:hover {
-  background: #d35400;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(243, 156, 18, 0.4);
 }
 
+.btn-signin:active {
+    transform: translateY(0);
+}
+
+/* Resend Section */
+.resend-section {
+    margin-top: 1.5rem;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 1.5rem 0;
+}
+
+.resend-text {
+    font-size: 0.9rem;
+    color: #5a6e8a;
+    text-align: center;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.resend-text i {
+    color: #f39c12;
+}
+
+.resend-form {
+    display: block;
+}
+
+.btn-resend {
+    background: #0a2540;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.btn-resend:hover {
+    background: #1a3a5c;
+    transform: translateY(-2px);
+}
+
+/* Extra Links */
 .extra-links {
-  margin-top: 20px;
-  font-size: 0.95rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-.extra-links a {
-  color: #3498db;
-  text-decoration: none;
+.link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #374151;
 }
 
-.extra-links a:hover {
-  text-decoration: underline;
+.link-item i {
+    color: #f39c12;
+    font-size: 0.85rem;
+    width: 20px;
+    text-align: center;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #222;
-  color: #fff;
-  margin-top: 40px;
+.link-item a {
+    color: #0a2540;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
+.link-item a i {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
 
+.link-item a:hover {
+    color: #f39c12;
+}
 
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/* Footer */
+.link-item a:hover i {
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .footer {
-  background: #222;
-  color: #ccc;
-  padding: 60px 20px 30px;
-}
-
-.footer-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-box h3 {
-  color: #e67e22;
-  margin-bottom: 10px;
-}
-
-.footer-box h4 {
-  color: #f1c40f;
-  margin-bottom: 15px;
-}
-
-.footer-box ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-box ul li {
-  margin-bottom: 8px;
-}
-
-.footer-box a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-box a:hover {
-  color: #f1c40f;
+    background: #0a1a2e;
+    color: #b0c4de;
+    padding: 1.5rem 5%;
+    margin-top: auto;
 }
 
 .footer-bottom {
-  border-top: 1px solid #444;
-  margin-top: 40px;
-  padding-top: 20px;
-  text-align: center;
-  font-size: 0.9rem;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.8rem;
 }
 
 .footer-bottom a {
-  color: #ccc;
-  text-decoration: none;
-  margin: 0 5px;
+    color: #b0c4de;
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
 .footer-bottom a:hover {
-  color: #f1c40f;
+    color: #f39c12;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+@media (max-width: 968px) {
+    .signin-section {
+        padding: 1.5rem 4%;
+        min-height: 100vh;
+    }
+
+    .signin-container {
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+    }
+
+    .signin-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+    .signin-icon-wrapper i {
+        font-size: 1.6rem;
+    }
+
+    .signin-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .signin-section {
+        padding: 1rem 3%;
+    }
+
+    .signin-container {
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+    }
+
+    .signin-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 1rem;
+    }
+
+    .signin-icon-wrapper i {
+        font-size: 1.3rem;
+    }
+
+    .signin-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .signin-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .form-control {
+        padding: 0.6rem 0.85rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-signin,
+    .btn-resend {
+        padding: 0.65rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .extra-links {
+        gap: 0.5rem;
+    }
+
+    .link-item {
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+    }
+
+    .link-item i {
+        width: 16px;
+    }
+
+    .footer {
+        padding: 1rem 4%;
+    }
+
+    .footer-bottom {
+        font-size: 0.7rem;
+    }
 }
 
 
 
 
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------------------*/
 
 
+/* ============================================================
+   MESSAGES - FIXED VERSION
+   ============================================================ */
+.messages-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
+.message {
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideDown 0.4s ease;
+    position: relative;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
 
+.message i:first-child {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
 
+.message-close {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    margin-left: auto;
+    transition: opacity 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.message-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
 
+/* Success Message */
+.message-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border-left-color: #10b981;
+}
 
+.message-success i:first-child {
+    color: #10b981;
+}
 
+/* Error Message */
+.message-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border-left-color: #ef4444;
+}
 
+.message-error i:first-child {
+    color: #ef4444;
+}
+
+/* Warning Message */
+.message-warning {
+    background: #fffbeb;
+    color: #92400e;
+    border-left-color: #f59e0b;
+}
+
+.message-warning i:first-child {
+    color: #f59e0b;
+}
+
+/* Info Message */
+.message-info {
+    background: #eff6ff;
+    color: #1e40af;
+    border-left-color: #3b82f6;
+}
+
+.message-info i:first-child {
+    color: #3b82f6;
+}
+
+/* Debug Message (fallback) */
+.message-debug,
+.message-default {
+    background: #f3f4f6;
+    color: #374151;
+    border-left-color: #6b7280;
+}
+
+.message-debug i:first-child,
+.message-default i:first-child {
+    color: #6b7280;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Field Error Styles */
+.field-error {
+    color: #dc2626;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    animation: slideDown 0.3s ease;
+}
+
+.field-error i {
+    font-size: 0.75rem;
+}
+
+.form-control.error {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1) !important;
+}

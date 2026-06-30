@@ -1,0 +1,302 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Footer - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/adminfooter.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-shoe-prints"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Footer Manager</h1>
+      <p>Manage footer content including company info, services, and contact details.</p>
+    </div>
+
+    <!-- ================= FOOTER MAIN INFO ================= -->
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-building"></i>
+          Footer Main Info
+        </h2>
+        <p>Edit the main company information displayed in the footer</p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" name="company_name" value="{{ footer.company_name }}" placeholder="Enter company name">
+        </div>
+        <div class="form-group">
+          <label>Company Description</label>
+          <textarea name="description" rows="4" placeholder="Enter company description">{{ footer.description }}</textarea>
+        </div>
+        <button type="submit" name="update_footer_main" class="btn-primary">
+          <i class="fas fa-save"></i> Save Main Info
+        </button>
+      </form>
+    </div>
+
+    <!-- ================= SERVICES SECTION ================= -->
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-cogs"></i>
+          Services
+        </h2>
+        <p>Hardcoded: Goods Transportation, Warehouse Management, Fleet Management, Same-Day Delivery</p>
+      </div>
+
+      <!-- Add Service Item -->
+      <div class="add-section">
+        <h3>
+          <i class="fas fa-plus-circle"></i>
+          Add New Service
+        </h3>
+        <form method="POST" class="add-form">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="text" name="service_title" placeholder="Service Title" required>
+          </div>
+          <div class="form-group">
+            <textarea name="service_desc" rows="3" placeholder="Service Description"></textarea>
+          </div>
+          <button type="submit" name="add_service_item" class="btn-success">
+            <i class="fas fa-plus"></i> Add Service
+          </button>
+        </form>
+      </div>
+
+      <!-- Existing Services -->
+      <div class="items-section">
+        <h3>
+          <i class="fas fa-list"></i>
+          Existing Services
+        </h3>
+        <div class="items-grid">
+          {% for item in service_items %}
+            <div class="item-card">
+              <div class="item-header">
+                <h4>{{ item.title }}</h4>
+              </div>
+              <div class="item-body">
+                <p>{{ item.description }}</p>
+              </div>
+              <div class="item-actions">
+                <form method="POST" class="inline-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_service_item" value="{{ item.id }}">
+                  <button type="submit" class="btn-delete-small" onclick="return confirm('Delete this service?')">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+              <div class="item-edit">
+                <form method="POST" class="edit-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="id" value="{{ item.id }}">
+                  <div class="form-row-inline">
+                    <input type="text" name="service_title" value="{{ item.title }}" class="edit-input" required>
+                    <textarea name="service_desc" rows="2" class="edit-textarea">{{ item.description }}</textarea>
+                    <button type="submit" name="edit_service_item" class="btn-edit-small">
+                      <i class="fas fa-save"></i> Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% empty %}
+            <p class="empty-message-small">No services added yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CONTACT SECTION ================= -->
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-address-card"></i>
+          Contact Section
+        </h2>
+        <p>Phone / Email / Location are editable items</p>
+      </div>
+
+      <!-- Add Contact Item -->
+      <div class="add-section">
+        <h3>
+          <i class="fas fa-plus-circle"></i>
+          Add New Contact
+        </h3>
+        <form method="POST" class="add-form">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" name="contact_title" placeholder="Title (Phone/Email/Location)" required>
+            </div>
+            <div class="form-group">
+              <input type="text" name="contact_value" placeholder="Value (e.g., +1234567890)" required>
+            </div>
+            <div class="form-group">
+              <input type="text" name="contact_link" placeholder="Optional link (e.g., mailto:email@example.com)">
+            </div>
+          </div>
+          <button type="submit" name="add_contact_item" class="btn-success">
+            <i class="fas fa-plus"></i> Add Contact
+          </button>
+        </form>
+      </div>
+
+      <!-- Existing Contact Items -->
+      <div class="items-section">
+        <h3>
+          <i class="fas fa-list"></i>
+          Existing Contact Items
+        </h3>
+        <div class="items-grid">
+          {% for item in contact_items %}
+            <div class="item-card">
+              <div class="item-header">
+                <h4><i class="fas fa-info-circle"></i> {{ item.title }}</h4>
+              </div>
+              <div class="item-body">
+                <p><strong>Value:</strong> {{ item.description }}</p>
+                {% if item.link %}
+                  <p><strong>Link:</strong> <code>{{ item.link }}</code></p>
+                {% endif %}
+              </div>
+              <div class="item-actions">
+                <form method="POST" class="inline-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_contact_item" value="{{ item.id }}">
+                  <button type="submit" class="btn-delete-small" onclick="return confirm('Delete this contact?')">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+              <div class="item-edit">
+                <form method="POST" class="edit-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="id" value="{{ item.id }}">
+                  <div class="form-row-inline">
+                    <input type="text" name="contact_title" value="{{ item.title }}" class="edit-input" required>
+                    <input type="text" name="contact_value" value="{{ item.description }}" class="edit-input" required>
+                    <input type="text" name="contact_link" value="{{ item.link }}" class="edit-input" placeholder="Optional link">
+                    <button type="submit" name="edit_contact_item" class="btn-edit-small">
+                      <i class="fas fa-save"></i> Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% empty %}
+            <p class="empty-message-small">No contact items added yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="{% static 'myApp/js/adminfooter.js' %}"></script>
+</body>
+</html>

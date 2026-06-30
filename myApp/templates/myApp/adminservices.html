@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Services - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/adminservices.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-cogs"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Manage Services</h1>
+      <p>Manage service categories, items, and customer quotes.</p>
+    </div>
+
+    <!-- Services Hero Section -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-star"></i>
+        Services Hero Section
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Tagline</label>
+          <input type="text" name="tagline" value="{{ hero.tagline }}" placeholder="Enter hero tagline">
+        </div>
+        <div class="form-group">
+          <label>Hero Title</label>
+          <input type="text" name="hero_title" value="{{ hero.hero_title }}" placeholder="Enter hero title">
+        </div>
+        <button type="submit" name="update_hero" class="btn-primary">
+          <i class="fas fa-save"></i> Save Hero
+        </button>
+      </form>
+    </div>
+
+    <!-- Add Service Category -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-plus-circle"></i>
+        Add Service Category
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" name="category_title" placeholder="Enter main service title" required>
+        </div>
+        <button type="submit" name="add_category" class="btn-success">
+          <i class="fas fa-plus"></i> Add Category
+        </button>
+      </form>
+    </div>
+
+    <!-- Add Service Item -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-plus-circle"></i>
+        Add Service Item
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Select Category</label>
+          <select name="category_id" class="form-select" required>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="item_title" placeholder="Service item title" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="item_desc" rows="3" placeholder="Service description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Icon</label>
+          <select name="item_icon" class="form-select" required>
+            <option value="fas fa-truck">🚚 Truck</option>
+            <option value="fas fa-shipping-fast">⚡ Shipping Fast</option>
+            <option value="fas fa-box-open">📦 Box Open</option>
+            <option value="fas fa-cogs">⚙️ Cogs</option>
+            <option value="fas fa-hand-holding-usd">💵 Hand Holding USD</option>
+            <option value="fas fa-users">👥 Users</option>
+            <option value="fas fa-phone">📞 Phone</option>
+            <option value="fas fa-globe">🌍 Globe</option>
+            <option value="fas fa-bolt">⚡ Bolt</option>
+            <option value="fas fa-check-circle">✅ Check Circle</option>
+            <option value="fas fa-building">🏢 Building</option>
+            <option value="fas fa-briefcase">💼 Briefcase</option>
+            <option value="fas fa-tools">🔧 Tools</option>
+            <option value="fas fa-wrench">🔧 Wrench</option>
+            <option value="fas fa-truck-loading">📥 Truck Loading</option>
+            <option value="fas fa-map-marker-alt">📍 Location</option>
+            <option value="fas fa-clock">⏰ Clock</option>
+            <option value="fas fa-shield-alt">🛡️ Shield</option>
+            <option value="fas fa-star">⭐ Star</option>
+            <option value="fas fa-thumbs-up">👍 Thumbs Up</option>
+          </select>
+        </div>
+        <button type="submit" name="add_item" class="btn-success">
+          <i class="fas fa-plus"></i> Add Item
+        </button>
+      </form>
+    </div>
+
+    <!-- Existing Services -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-list"></i>
+        Existing Services
+      </h2>
+
+      {% for cat in categories %}
+        <div class="category-section">
+          <div class="category-header">
+            <div class="category-title">
+              <i class="fas fa-folder"></i>
+              <span>{{ cat.title }}</span>
+            </div>
+            <div class="category-actions">
+              <form method="POST" class="inline-form">
+                {% csrf_token %}
+                <input type="hidden" name="category_id" value="{{ cat.id }}">
+                <input type="text" name="edit_category_title" value="{{ cat.title }}" required class="inline-input">
+                <button type="submit" name="edit_category" class="btn-edit-small">
+                  <i class="fas fa-save"></i>
+                </button>
+              </form>
+              <form method="POST" class="inline-form">
+                {% csrf_token %}
+                <input type="hidden" name="delete_category_id" value="{{ cat.id }}">
+                <button type="submit" name="delete_category" class="btn-delete-small" onclick="return confirm('Delete this category and all its items?')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {% if cat.items.all %}
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th width="60">Icon</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th width="180">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in cat.items.all %}
+                  <tr>
+                    <td class="icon-cell"><i class="{{ item.icon }}"></i></td>
+                    <td><strong>{{ item.title }}</strong></td>
+                    <td>{{ item.description }}</td>
+                    <td>
+                      <div class="action-buttons">
+                        <button onclick="toggleEdit({{ item.id }})" class="btn-edit-small" type="button">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <form method="POST" style="display:inline;">
+                          {% csrf_token %}
+                          <input type="hidden" name="delete_item_id" value="{{ item.id }}">
+                          <button type="submit" name="delete_item" class="btn-delete-small" onclick="return confirm('Delete this service item?')">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="edit-form-{{ item.id }}" class="edit-form-row" style="display:none;">
+                    <td colspan="4">
+                      <form method="POST" class="edit-item-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="edit_item_id" value="{{ item.id }}">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="item_title" value="{{ item.title }}" required>
+                          </div>
+                          <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" name="item_desc" value="{{ item.description }}" required>
+                          </div>
+                          <div class="form-group">
+                            <label>Icon</label>
+                            <select name="item_icon">
+                              <option value="fas fa-truck" {% if item.icon == "fas fa-truck" %}selected{% endif %}>🚚 Truck</option>
+                              <option value="fas fa-shipping-fast" {% if item.icon == "fas fa-shipping-fast" %}selected{% endif %}>⚡ Shipping Fast</option>
+                              <option value="fas fa-box-open" {% if item.icon == "fas fa-box-open" %}selected{% endif %}>📦 Box Open</option>
+                              <option value="fas fa-cogs" {% if item.icon == "fas fa-cogs" %}selected{% endif %}>⚙️ Cogs</option>
+                              <option value="fas fa-hand-holding-usd" {% if item.icon == "fas fa-hand-holding-usd" %}selected{% endif %}>💵 Hand Holding USD</option>
+                              <option value="fas fa-users" {% if item.icon == "fas fa-users" %}selected{% endif %}>👥 Users</option>
+                              <option value="fas fa-phone" {% if item.icon == "fas fa-phone" %}selected{% endif %}>📞 Phone</option>
+                              <option value="fas fa-globe" {% if item.icon == "fas fa-globe" %}selected{% endif %}>🌍 Globe</option>
+                              <option value="fas fa-bolt" {% if item.icon == "fas fa-bolt" %}selected{% endif %}>⚡ Bolt</option>
+                              <option value="fas fa-check-circle" {% if item.icon == "fas fa-check-circle" %}selected{% endif %}>✅ Check Circle</option>
+                              <option value="fas fa-building" {% if item.icon == "fas fa-building" %}selected{% endif %}>🏢 Building</option>
+                              <option value="fas fa-briefcase" {% if item.icon == "fas fa-briefcase" %}selected{% endif %}>💼 Briefcase</option>
+                              <option value="fas fa-tools" {% if item.icon == "fas fa-tools" %}selected{% endif %}>🔧 Tools</option>
+                              <option value="fas fa-wrench" {% if item.icon == "fas fa-wrench" %}selected{% endif %}>🔧 Wrench</option>
+                              <option value="fas fa-truck-loading" {% if item.icon == "fas fa-truck-loading" %}selected{% endif %}>📥 Truck Loading</option>
+                              <option value="fas fa-map-marker-alt" {% if item.icon == "fas fa-map-marker-alt" %}selected{% endif %}>📍 Location</option>
+                              <option value="fas fa-clock" {% if item.icon == "fas fa-clock" %}selected{% endif %}>⏰ Clock</option>
+                              <option value="fas fa-shield-alt" {% if item.icon == "fas fa-shield-alt" %}selected{% endif %}>🛡️ Shield</option>
+                              <option value="fas fa-star" {% if item.icon == "fas fa-star" %}selected{% endif %}>⭐ Star</option>
+                              <option value="fas fa-thumbs-up" {% if item.icon == "fas fa-thumbs-up" %}selected{% endif %}>👍 Thumbs Up</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <button type="submit" name="edit_item" class="btn-primary" style="margin-top: 24px;">
+                              <i class="fas fa-save"></i> Save Changes
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="empty-message-small">No service items in this category yet.</p>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="empty-message">No service categories yet. Create one above.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Customer Quotes -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-quote-left"></i>
+        Customer Quotes
+      </h2>
+
+      {% if quotes %}
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Service</th>
+                <th>Needs</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for quote in quotes %}
+              <tr>
+                <td><strong>{{ quote.fullname }}</strong></td>
+                <td>{{ quote.email }}</td>
+                <td>{{ quote.phone }}</td>
+                <td>{{ quote.service }}</td>
+                <td>{{ quote.needs|truncatewords:10 }}</td>
+                <td>{{ quote.created_at|date:"Y-m-d H:i" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="empty-message">No customer quotes yet.</p>
+      {% endif %}
+    </div>
+
+  </main>
+
+</div>
+
+<script src="{% static 'myApp/js/adminservices.js' %}"></script>
+</body>
+</html>

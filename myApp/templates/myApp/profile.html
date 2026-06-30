@@ -1,22 +1,1162 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile | SJS Company</title>
+
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="{% static 'myApp/css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<h1>User Profile</h1>
+    <!-- ============================================================ -->
+    <!-- HEADER / NAVIGATION -->
+    <!-- ============================================================ -->
+    <header class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <div class="logo">
+                <div class="logo-circle">
+                    {% if header.logo %}
+                        <img src="{{ header.logo.url }}" alt="{{ header.company_name|default:'SJS Company' }} Logo">
+                    {% else %}
+                        <span class="logo-placeholder">S</span>
+                    {% endif %}
+                </div>
+                <span class="company-name">{{ header.company_name|default:"SJS Company" }}</span>
+            </div>
 
-<p>This page will display the user's profile information.</p>
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
 
-<ul>
-    <li>Name:</li>
-    <li>Email:</li>
-    <li>Phone:</li>
-</ul>
+            <!-- Navigation -->
+            <nav class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                    <li><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                    <li><a href="{% url 'services' %}" class="nav-link">Services</a></li>
+                    <li><a href="{% url 'careers' %}" class="nav-link">Careers</a></li>
+                    <li><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                    <li class="user-menu">
+                        <div class="user-circle" onclick="toggleUserMenu()" aria-expanded="false">
+                            {% if user.is_authenticated %}
+                                {{ user.first_name|first }}{{ user.last_name|first }}
+                            {% else %}
+                                <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <ul class="dropdown-menu" id="userDropdown" role="menu">
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'profile' %}" role="menuitem" class="active">Profile</a></li>
+                                <li><a href="{% url 'signout' %}" role="menuitem">Sign Out</a></li>
+                            {% else %}
+                                <li><a href="{% url 'signin' %}" role="menuitem">Sign In</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<a href="{% url 'home' %}">Back to Home</a>
+    <!-- ============================================================ -->
+    <!-- PROFILE HERO / HEADER -->
+    <!-- ============================================================ -->
+    <section class="profile-hero">
+        <div class="profile-hero-content">
+            <div class="profile-avatar">
+                <span class="avatar-initials">
+                    {% if user.is_authenticated %}
+                        {{ user.first_name|first }}{{ user.last_name|first }}
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="profile-hero-text">
+                <h1>User Profile</h1>
+                <p class="profile-hero-subtitle">
+                    <i class="fas fa-id-card"></i>
+                    Manage your Info
+                </p>
+            </div>
+        </div>
+    </section>
 
+    <!-- Profile Data Attribute -->
+    <div id="profile-data" data-section="{{ profile_alert.section }}"></div>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <main class="profile-main">
+
+        <!-- ========================================================== -->
+        <!-- YOUR DETAILS CONTAINER - STARTS OPEN -->
+        <!-- ========================================================== -->
+        <section class="dashboard-container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header active" onclick="toggleSection('detailsContent')">
+                <div>
+                    <i class="fas fa-user-circle"></i>
+                    <h2>Your Details</h2>
+                    <p>View and update your personal information, experience and documents</p>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <!-- Dashboard Content - STARTS OPEN -->
+            <div id="detailsContent" class="dashboard-content" style="display: block;">
+
+                <!-- ========================================================== -->
+                <!-- PERSONAL DETAILS -->
+                <!-- ========================================================== -->
+                <section class="profile-section" id="personalSection">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <i class="fas fa-user section-icon"></i>
+                            <h2>Personal Details</h2>
+                        </div>
+                        <button type="button" class="btn-edit" onclick="openModal('personalModal')">
+                            <i class="fas fa-pen"></i> Edit
+                        </button>
+                    </div>
+
+                    {% if profile_alert.section == "personal" %}
+                        <div class="profile-warning" id="personalWarning">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ profile_alert.message }}
+                        </div>
+                    {% endif %}
+
+                    <div class="info-grid personal-grid">
+                        <!-- First Name -->
+                        <div class="info-item {% if 'first_name' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">First Name</span>
+                            <span class="info-value">{{ user.first_name|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Middle Name -->
+                        <div class="info-item {% if 'middle_name' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Middle Name</span>
+                            <span class="info-value">{{ profile.middle_name|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="info-item {% if 'last_name' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Last Name</span>
+                            <span class="info-value">{{ user.last_name|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- ID Number -->
+                        <div class="info-item {% if 'id_number' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">ID Number</span>
+                            <span class="info-value">{{ profile.id_number|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="info-item {% if 'dob' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Date of Birth</span>
+                            <span class="info-value">{{ profile.dob|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="info-item {% if 'gender' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Gender</span>
+                            <span class="info-value">{{ profile.gender|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Race -->
+                        <div class="info-item {% if 'race' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Race</span>
+                            <span class="info-value">{{ profile.race|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Nationality -->
+                        <div class="info-item {% if 'nationality' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Nationality</span>
+                            <span class="info-value">{{ profile.nationality|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Marital Status -->
+                        <div class="info-item {% if 'marital_status' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Marital Status</span>
+                            <span class="info-value">{{ profile.marital_status|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="info-item {% if 'address' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Address</span>
+                            <span class="info-value">{{ profile.address|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- City -->
+                        <div class="info-item {% if 'city' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">City</span>
+                            <span class="info-value">{{ profile.city|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Province -->
+                        <div class="info-item {% if 'province' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Province</span>
+                            <span class="info-value">{{ profile.province|default:"Not specified" }}</span>
+                        </div>
+
+                        <!-- Country -->
+                        <div class="info-item {% if 'country' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label">Country</span>
+                            <span class="info-value">{{ profile.country|default:"Not specified" }}</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PERSONAL MODAL -->
+                <div id="personalModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2><i class="fas fa-user"></i> Edit Personal Details</h2>
+                            <button class="close-btn" onclick="closeModal('personalModal')">&times;</button>
+                        </div>
+                        <form method="POST" action="{% url 'update_profile' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="personal">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" name="first_name" value="{{ user.first_name }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Middle Name</label>
+                                    <input type="text" name="middle_name" value="{{ profile.middle_name }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>ID Number</label>
+                                    <input type="text" name="id_number" value="{{ profile.id_number }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date of Birth</label>
+                                    <input type="date" name="dob" value="{{ profile.dob|date:'Y-m-d' }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <input type="text" name="gender" value="{{ profile.gender }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Race</label>
+                                    <input type="text" name="race" value="{{ profile.race }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nationality</label>
+                                    <input type="text" name="nationality" value="{{ profile.nationality }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Marital Status</label>
+                                    <input type="text" name="marital_status" value="{{ profile.marital_status }}" class="form-control">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Address</label>
+                                    <textarea name="address" rows="3" class="form-control">{{ profile.address }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" name="city" value="{{ profile.city }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Province</label>
+                                    <input type="text" name="province" value="{{ profile.province }}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <input type="text" name="country" value="{{ profile.country }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button>
+                                <button type="button" class="btn-cancel" onclick="closeModal('personalModal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- CONTACT DETAILS -->
+                <!-- ========================================================== -->
+                <section class="profile-section" id="contactSection">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <i class="fas fa-phone section-icon"></i>
+                            <h2>Contact Details</h2>
+                        </div>
+                        <button type="button" class="btn-edit" onclick="openModal('contactModal')">
+                            <i class="fas fa-pen"></i> Edit
+                        </button>
+                    </div>
+
+                    {% if profile_alert.section == "contact" %}
+                        <div class="profile-warning" id="contactWarning">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ profile_alert.message }}
+                        </div>
+                    {% endif %}
+
+                    <div class="info-grid contact-grid">
+                        <!-- Email -->
+                        <div class="info-item {% if profile_alert.section == 'contact' and 'email' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label"><i class="fas fa-envelope"></i> Email</span>
+                            <span class="info-value">
+                                {% if contact and contact.email %}
+                                    {{ contact.email }}
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Primary Phone -->
+                        <div class="info-item {% if profile_alert.section == 'contact' and 'phone_primary' in profile_alert.missing %}missing-field{% endif %}">
+                            <span class="info-label"><i class="fas fa-phone"></i> Primary Phone</span>
+                            <span class="info-value">
+                                {% if contact and contact.phone_primary %}
+                                    {{ contact.phone_primary }}
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Alternative Phone -->
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-phone-alt"></i> Alternative Phone</span>
+                            <span class="info-value">
+                                {% if contact and contact.phone_alternative %}
+                                    {{ contact.phone_alternative }}
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- LinkedIn -->
+                        <div class="info-item">
+                            <span class="info-label"><i class="fab fa-linkedin"></i> LinkedIn</span>
+                            <span class="info-value url-truncate">
+                                {% if contact and contact.linkedin %}
+                                    <a href="{{ contact.linkedin }}" target="_blank" rel="noopener noreferrer" class="truncate-link">
+                                        <i class="fas fa-external-link-alt"></i> {{ contact.linkedin|truncatechars:35 }}
+                                    </a>
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Portfolio -->
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-globe"></i> Portfolio</span>
+                            <span class="info-value url-truncate">
+                                {% if contact and contact.portfolio %}
+                                    <a href="{{ contact.portfolio }}" target="_blank" rel="noopener noreferrer" class="truncate-link">
+                                        <i class="fas fa-external-link-alt"></i> {{ contact.portfolio|truncatechars:35 }}
+                                    </a>
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTACT MODAL -->
+                <div id="contactModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2><i class="fas fa-phone"></i> Edit Contact Details</h2>
+                            <button class="close-btn" onclick="closeModal('contactModal')">&times;</button>
+                        </div>
+                        <form method="POST" action="{% url 'update_profile' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="contact">
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label>Email</label>
+                                    <input type="email" name="contact_email" value="{% if contact %}{{ contact.email }}{% endif %}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Primary Phone</label>
+                                    <input type="text" name="phone_primary" value="{% if contact %}{{ contact.phone_primary }}{% endif %}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Alternative Phone</label>
+                                    <input type="text" name="phone_alternative" value="{% if contact %}{{ contact.phone_alternative }}{% endif %}" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>LinkedIn</label>
+                                    <input type="text" name="linkedin" value="{% if contact %}{{ contact.linkedin }}{% endif %}" class="form-control" placeholder="https://linkedin.com/in/yourprofile">
+                                </div>
+                                <div class="form-group">
+                                    <label>Portfolio</label>
+                                    <input type="text" name="portfolio" value="{% if contact %}{{ contact.portfolio }}{% endif %}" class="form-control" placeholder="https://yourportfolio.com">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button>
+                                <button type="button" class="btn-cancel" onclick="closeModal('contactModal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- WORK EXPERIENCE -->
+                <!-- ========================================================== -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <i class="fas fa-briefcase section-icon"></i>
+                            <h2>Work Experience</h2>
+                        </div>
+                        <button type="button" class="btn-edit" onclick="openAddWorkModal()">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+
+                    {% if work_experience %}
+                        <div class="experience-list">
+                            {% for work in work_experience %}
+                                <div class="experience-card {% if forloop.counter > 1 %}extra-work{% endif %}">
+                                    <div class="experience-header">
+                                        <div class="experience-title">
+                                            <h3>{{ work.job_title|default:"Job Title" }}</h3>
+                                            <span class="experience-company">{{ work.company|default:"Company" }}</span>
+                                        </div>
+                                        <div class="experience-actions">
+                                            <button type="button" class="btn-icon" onclick="openEditWorkModal(
+                                                '{{ work.id }}',
+                                                '{{ work.company|escapejs }}',
+                                                '{{ work.job_title|escapejs }}',
+                                                '{{ work.description|escapejs }}',
+                                                '{{ work.start_date|date:"Y-m-d" }}',
+                                                '{{ work.end_date|date:"Y-m-d" }}',
+                                                '{{ work.reason_for_leaving|escapejs }}',
+                                                '{{ work.currently_working }}'
+                                            )">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <form method="POST" action="{% url 'delete_profile' %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="delete_type" value="work">
+                                                <input type="hidden" name="work_id" value="{{ work.id }}">
+                                                <button type="submit" class="btn-icon danger" onclick="return confirm('Delete this work experience?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="experience-body">
+                                        <div class="experience-meta">
+                                            <span class="meta-item">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                {{ work.start_date|default:"Start date" }}
+                                                {% if work.end_date %}
+                                                    - {{ work.end_date }}
+                                                {% else %}
+                                                    - Present
+                                                {% endif %}
+                                            </span>
+                                            <span class="meta-item">
+                                                <i class="fas fa-clock"></i>
+                                                {% if work.currently_working %}
+                                                    <span class="badge badge-success">Currently Working</span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">Left Company</span>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        {% if work.description %}
+                                            <p class="experience-description">{{ work.description }}</p>
+                                        {% endif %}
+                                        {% if work.reason_for_leaving %}
+                                            <div class="experience-reason">
+                                                <strong>Reason for leaving:</strong>
+                                                <p>{{ work.reason_for_leaving }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {% if work_experience|length > 1 %}
+                            <button type="button" class="btn-more" onclick="toggleWorkExperience()" id="workMoreBtn">
+                                <i class="fas fa-chevron-down"></i> View More
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-briefcase"></i>
+                            <p>No work experience added</p>
+                            <small>Click "Add" to add your work history</small>
+                        </div>
+                    {% endif %}
+                </section>
+
+                <!-- WORK EXPERIENCE MODAL -->
+                <div id="workModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="workModalTitle"><i class="fas fa-briefcase"></i> Add Work Experience</h2>
+                            <button class="close-btn" onclick="closeModal('workModal')">&times;</button>
+                        </div>
+                        <form method="POST" action="{% url 'update_profile' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="work">
+                            <input type="hidden" name="work_id" id="work_id">
+
+                            <div class="form-group">
+                                <label>Do you have previous work experience?</label>
+                                <select id="hasExperience" onchange="toggleWorkFields()" class="form-control">
+                                    <option value="">Select Option</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+
+                            <div id="workFields" style="display:none;">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <input type="text" name="company" placeholder="Enter company name" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Job Title</label>
+                                        <input type="text" name="job_title" placeholder="Enter job title" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea name="description" placeholder="Describe your duties and responsibilities" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <input type="date" name="start_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="currentlyWorking" name="currently_working" onchange="toggleEndDate()">
+                                            <label for="currentlyWorking">Currently working at this company</label>
+                                        </div>
+                                        <div id="endDateContainer">
+                                            <label>End Date</label>
+                                            <input type="date" id="endDate" name="end_date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Reason For Leaving / Wanting To Leave</label>
+                                    <textarea name="reason_for_leaving" placeholder="Explain reason" class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Work Experience</button>
+                                <button type="button" class="btn-cancel" onclick="closeModal('workModal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- EDUCATION -->
+                <!-- ========================================================== -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <i class="fas fa-graduation-cap section-icon"></i>
+                            <h2>Education</h2>
+                        </div>
+                        <button type="button" class="btn-edit" onclick="openAddEducationModal()">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+
+                    {% if education %}
+                        <div class="education-list">
+                            {% for edu in education %}
+                                <div class="education-card {% if forloop.counter > 1 %}extra-education{% endif %}" {% if forloop.counter > 1 %}style="display:none;"{% endif %}>
+                                    <div class="education-header">
+                                        <div class="education-title">
+                                            <h3>{{ edu.school_name|default:"School" }}</h3>
+                                            <span class="education-qualification">{{ edu.qualification|default:"Qualification" }}</span>
+                                        </div>
+                                        <div class="education-actions">
+                                            <button type="button" class="btn-icon" onclick="openEditEducationModal(
+                                                '{{ edu.id }}',
+                                                '{{ edu.school_name|escapejs }}',
+                                                '{{ edu.qualification|escapejs }}',
+                                                '{{ edu.qualification_level|escapejs }}',
+                                                '{{ edu.start_date|date:"Y-m-d" }}',
+                                                '{{ edu.end_date|date:"Y-m-d" }}'
+                                            )">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <form method="POST" action="{% url 'delete_profile' %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="delete_type" value="education">
+                                                <input type="hidden" name="education_id" value="{{ edu.id }}">
+                                                <button type="submit" class="btn-icon danger" onclick="return confirm('Delete this education record?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="education-body">
+                                        <div class="education-meta">
+                                            <span class="meta-item">
+                                                <i class="fas fa-tag"></i>
+                                                {{ edu.qualification_level|default:"Level" }}
+                                            </span>
+                                            <span class="meta-item">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                {{ edu.start_date|default:"Start" }} - {{ edu.end_date|default:"Current" }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {% if education|length > 1 %}
+                            <button type="button" class="btn-more" id="educationMoreBtn" onclick="showMoreEducation()">
+                                <i class="fas fa-chevron-down"></i> View More
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-graduation-cap"></i>
+                            <p>No education records added</p>
+                            <small>Click "Add" to add your education history</small>
+                        </div>
+                    {% endif %}
+                </section>
+
+                <!-- EDUCATION MODAL -->
+                <div id="educationModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="educationModalTitle"><i class="fas fa-graduation-cap"></i> Add Education</h2>
+                            <button class="close-btn" onclick="closeModal('educationModal')">&times;</button>
+                        </div>
+                        <form method="POST" action="{% url 'update_profile' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="education">
+                            <input type="hidden" name="education_id" id="education_id">
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>School Name</label>
+                                    <input type="text" id="school_name" name="school_name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Qualification</label>
+                                    <input type="text" id="qualification" name="qualification" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Qualification Level</label>
+                                    <input type="text" id="qualification_level" name="qualification_level" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="date" id="education_start_date" name="start_date" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" id="education_end_date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Education</button>
+                                <button type="button" class="btn-cancel" onclick="closeModal('educationModal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- DOCUMENTS -->
+                <!-- ========================================================== -->
+                <section class="profile-section" id="documentsSection">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <i class="fas fa-folder section-icon"></i>
+                            <h2>Documents</h2>
+                        </div>
+                        <button type="button" class="btn-edit" onclick="openModal('documentsModal')">
+                            <i class="fas fa-pen"></i> Edit
+                        </button>
+                    </div>
+
+                    {% if profile_alert.section == "documents" %}
+                        <div class="profile-warning" id="documentsWarning">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ profile_alert.message }}
+                        </div>
+                    {% endif %}
+
+                    <!-- MAIN DOCUMENTS -->
+                    <div class="documents-grid">
+                        <!-- RESUME -->
+                        <div class="document-card {% if profile_alert.section == 'documents' and 'resume' in profile_alert.missing %}missing-field{% endif %}">
+                            <div class="document-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-label">Resume</span>
+                                <span class="document-name">
+                                    {% if attachments and attachments.resume %}
+                                        {{ attachments.resume.name|cut:"uploads/" }}
+                                        <div class="document-actions">
+                                            <a href="{{ attachments.resume.url }}" target="_blank" class="btn-small">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="{{ attachments.resume.url }}" download class="btn-small">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">Not uploaded</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- ID DOCUMENT -->
+                        <div class="document-card {% if profile_alert.section == 'documents' and 'id_document' in profile_alert.missing %}missing-field{% endif %}">
+                            <div class="document-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-label">ID Document</span>
+                                <span class="document-name">
+                                    {% if attachments and attachments.id_document %}
+                                        {{ attachments.id_document.name|cut:"uploads/" }}
+                                        <div class="document-actions">
+                                            <a href="{{ attachments.id_document.url }}" target="_blank" class="btn-small">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="{{ attachments.id_document.url }}" download class="btn-small">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">Not uploaded</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- MATRIC CERTIFICATE -->
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-label">Matric Certificate</span>
+                                <span class="document-name">
+                                    {% if attachments and attachments.matric_certificate %}
+                                        {{ attachments.matric_certificate.name|cut:"uploads/" }}
+                                        <div class="document-actions">
+                                            <a href="{{ attachments.matric_certificate.url }}" target="_blank" class="btn-small">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="{{ attachments.matric_certificate.url }}" download class="btn-small">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">Not uploaded</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUALIFICATION CERTIFICATES -->
+                    <div class="qualifications-section">
+                        <div class="qualifications-header">
+                            <h3><i class="fas fa-medal"></i> Qualification Certificates</h3>
+                            <button type="button" class="btn-edit" onclick="openModal('qualificationModal')">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+
+                        {% if qualification_documents %}
+                            <div class="qualification-list">
+                                {% for doc in qualification_documents %}
+                                    <div class="qualification-item {% if forloop.counter > 1 %}extra-qualification{% endif %}" {% if forloop.counter > 1 %}style="display:none;"{% endif %}>
+                                        <div class="qualification-info">
+                                            <span class="qualification-name">{{ doc.qualification_name }}</span>
+                                            <span class="qualification-file">
+                                                {{ doc.certificate.name|cut:"uploads/" }}
+                                                <div class="document-actions">
+                                                    <a href="{{ doc.certificate.url }}" target="_blank" class="btn-small">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </a>
+                                                    <a href="{{ doc.certificate.url }}" download class="btn-small">
+                                                        <i class="fas fa-download"></i> Download
+                                                    </a>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="qualification-actions">
+                                            <button type="button" class="btn-icon" onclick="openEditQualificationModal(
+                                                '{{ doc.id }}',
+                                                '{{ doc.qualification_name|escapejs }}',
+                                                '{{ doc.certificate.name|escapejs }}'
+                                            )">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <form method="POST" action="{% url 'delete_profile' %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="delete_type" value="qualification_document">
+                                                <input type="hidden" name="qualification_id" value="{{ doc.id }}">
+                                                <button type="submit" class="btn-icon danger" onclick="return confirm('Delete this qualification certificate?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if qualification_documents.count > 1 %}
+                                <button type="button" class="btn-more" id="qualificationMoreBtn" onclick="toggleQualifications()">
+                                    <i class="fas fa-chevron-down"></i> View More
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <div class="empty-state small">
+                                <p>No qualification certificates uploaded</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+            </div><!-- /detailsContent -->
+        </section><!-- /dashboard-container -->
+
+        <!-- ========================================================== -->
+        <!-- YOUR APPLICATIONS CONTAINER -->
+        <!-- ========================================================== -->
+        <section class="profile-section">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <i class="fas fa-paper-plane section-icon"></i>
+                    <h2>Your Applications</h2>
+                </div>
+            </div>
+
+            {% if user_applications %}
+                <div class="application-list">
+                    {% for application in user_applications %}
+                        <div class="application-card {% if forloop.counter > 3 %}extra-application{% endif %}">
+                            <div class="application-header">
+                                <div class="application-title">
+                                    <h3>{{ application.job.job_title }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="application-body">
+                                <div class="application-meta">
+                                    <span class="meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Applied: {{ application.date_applied|date:"d M Y H:i" }}
+                                    </span>
+                                </div>
+
+                                <div class="application-status">
+                                    {% if application.status == "pending" %}
+                                        <span class="badge badge-warning">Pending</span>
+                                    {% elif application.status == "reviewed" %}
+                                        <span class="badge badge-info">Reviewed</span>
+                                    {% elif application.status == "accepted" %}
+                                        <span class="badge badge-success">Accepted</span>
+                                    {% elif application.status == "rejected" %}
+                                        <span class="badge badge-danger">Rejected</span>
+                                    {% endif %}
+                                </div>
+
+                                {% if application.status == "pending" %}
+                                    <div class="application-actions">
+                                        <form method="POST" action="{% url 'delete_application' application.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-delete-application" onclick="return confirm('Are you sure you want to withdraw this application?');">
+                                                <i class="fas fa-trash"></i>
+                                                Withdraw Application
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if user_applications|length > 3 %}
+                    <button type="button" class="btn-more" id="applicationMoreBtn" onclick="toggleApplications()">
+                        <i class="fas fa-chevron-down"></i> View More
+                    </button>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <p>No job applications submitted yet.</p>
+                    <small>Applications you submit will appear here.</small>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- DOCUMENTS EDIT MODAL (Outside Dashboard) -->
+    <!-- ============================================================ -->
+    <div id="documentsModal" class="modal">
+        <div class="modal-content modal-wide">
+            <div class="modal-header">
+                <h2><i class="fas fa-folder"></i> Edit Documents</h2>
+                <button class="close-btn" onclick="closeModal('documentsModal')">&times;</button>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="documents">
+                <input type="hidden" name="remove_resume" id="remove_resume" value="false">
+                <input type="hidden" name="remove_id_document" id="remove_id_document" value="false">
+                <input type="hidden" name="remove_matric_certificate" id="remove_matric_certificate" value="false">
+
+                <!-- RESUME -->
+                <div class="document-edit-item">
+                    <div class="document-edit-label">
+                        <i class="fas fa-file-alt"></i>
+                        <label>Resume</label>
+                    </div>
+                    <div class="document-edit-controls">
+                        <span id="resume_display" class="document-current">
+                            {% if attachments.resume %}
+                                Current: {{ attachments.resume.name }}
+                            {% else %}
+                                No Resume Uploaded
+                            {% endif %}
+                        </span>
+                        <div class="document-edit-actions">
+                            {% if attachments.resume %}
+                                <a href="{{ attachments.resume.url }}" target="_blank" class="btn-small">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{{ attachments.resume.url }}" download class="btn-small">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            {% endif %}
+
+                            <input type="file" id="resumeInput" name="resume" style="display:none;" onchange="updateFileLabel('resumeInput','resumeLabel')">
+                            <button type="button" class="btn-small" onclick="document.getElementById('resumeInput').click()">
+                                <span id="resumeLabel">
+                                    {% if attachments.resume %}Replace{% else %}Choose File{% endif %}
+                                </span>
+                            </button>
+
+                            {% if attachments.resume %}
+                                <button type="button" class="btn-small danger" onclick="removeResume()">Remove</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- ID DOCUMENT -->
+                <div class="document-edit-item">
+                    <div class="document-edit-label">
+                        <i class="fas fa-id-card"></i>
+                        <label>ID Document</label>
+                    </div>
+                    <div class="document-edit-controls">
+                        <span id="id_document_display" class="document-current">
+                            {% if attachments.id_document %}
+                                Current: {{ attachments.id_document.name }}
+                            {% else %}
+                                No ID Document Uploaded
+                            {% endif %}
+                        </span>
+                        <div class="document-edit-actions">
+                            {% if attachments.id_document %}
+                                <a href="{{ attachments.id_document.url }}" target="_blank" class="btn-small">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{{ attachments.id_document.url }}" download class="btn-small">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            {% endif %}
+
+                            <input type="file" id="idDocumentInput" name="id_document" style="display:none;" onchange="updateFileLabel('idDocumentInput','idDocumentLabel')">
+                            <button type="button" class="btn-small" onclick="document.getElementById('idDocumentInput').click()">
+                                <span id="idDocumentLabel">
+                                    {% if attachments.id_document %}Replace{% else %}Choose File{% endif %}
+                                </span>
+                            </button>
+
+                            {% if attachments.id_document %}
+                                <button type="button" class="btn-small danger" onclick="removeIDDocument()">Remove</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- MATRIC CERTIFICATE -->
+                <div class="document-edit-item">
+                    <div class="document-edit-label">
+                        <i class="fas fa-certificate"></i>
+                        <label>Matric Certificate</label>
+                    </div>
+                    <div class="document-edit-controls">
+                        <span id="matric_display" class="document-current">
+                            {% if attachments.matric_certificate %}
+                                Current: {{ attachments.matric_certificate.name }}
+                            {% else %}
+                                No Matric Certificate Uploaded
+                            {% endif %}
+                        </span>
+                        <div class="document-edit-actions">
+                            {% if attachments.matric_certificate %}
+                                <a href="{{ attachments.matric_certificate.url }}" target="_blank" class="btn-small">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{{ attachments.matric_certificate.url }}" download class="btn-small">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            {% endif %}
+
+                            <input type="file" id="matricInput" name="matric_certificate" style="display:none;" onchange="updateFileLabel('matricInput','matricLabel')">
+                            <button type="button" class="btn-small" onclick="document.getElementById('matricInput').click()">
+                                <span id="matricLabel">
+                                    {% if attachments.matric_certificate %}Replace{% else %}Choose File{% endif %}
+                                </span>
+                            </button>
+
+                            {% if attachments.matric_certificate %}
+                                <button type="button" class="btn-small danger" onclick="removeMatricCertificate()">Remove</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save"><i class="fas fa-save"></i> Update Documents</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal('documentsModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ADD QUALIFICATION MODAL -->
+    <!-- ============================================================ -->
+    <div id="qualificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-medal"></i> Add Qualification</h2>
+                <button class="close-btn" onclick="closeModal('qualificationModal')">&times;</button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="qualification_document">
+
+                <div class="form-group">
+                    <label>Qualification Name</label>
+                    <input type="text" name="qualification_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Certificate</label>
+                    <input type="file" name="certificate" class="form-control">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save"><i class="fas fa-plus"></i> Add Qualification</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal('qualificationModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- EDIT QUALIFICATION MODAL -->
+    <!-- ============================================================ -->
+    <div id="editQualificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-medal"></i> Edit Qualification</h2>
+                <button class="close-btn" onclick="closeModal('editQualificationModal')">&times;</button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="qualification_document">
+                <input type="hidden" name="qualification_id" id="qualification_id">
+                <input type="hidden" name="remove_certificate" id="remove_certificate" value="false">
+
+                <div class="form-group">
+                    <label>Qualification Name</label>
+                    <input type="text" name="qualification_name" id="qualification_name" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Certificate</label>
+                    <p id="current_certificate" class="document-current">No certificate uploaded.</p>
+                    <div class="document-edit-actions" style="margin-top: 8px;">
+                        <input type="file" id="certificateInput" name="certificate" style="display:none;" onchange="updateCertificateLabel()">
+                        <button type="button" class="btn-small" onclick="document.getElementById('certificateInput').click()">
+                            <span id="certificateLabel">Replace Certificate</span>
+                        </button>
+                        <button type="button" class="btn-small danger" onclick="removeQualificationCertificate()">Remove</button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save"><i class="fas fa-save"></i> Update Qualification</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal('editQualificationModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="profile-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 {{ header.company_name|default:"SJS Company" }}. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'myApp/js/profile.js' %}"></script>
 </body>
 </html>

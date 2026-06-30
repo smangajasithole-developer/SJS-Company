@@ -1,0 +1,431 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin About - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/adminabout.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-info-circle"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Manage About Page</h1>
+      <p>Edit the content that appears on the public About page.</p>
+    </div>
+
+    <!-- About Hero Section -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-star"></i>
+        About Hero Section
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Tagline</label>
+          <input type="text" name="tagline" value="{{ hero.tagline }}" placeholder="Enter hero tagline">
+        </div>
+        <div class="form-group">
+          <label>Hero Title</label>
+          <input type="text" name="hero_title" value="{{ hero.hero_title }}" placeholder="Enter hero title">
+        </div>
+        <button type="submit" name="update_hero" class="btn-primary">
+          <i class="fas fa-save"></i> Save Hero
+        </button>
+      </form>
+    </div>
+
+    <!-- About Content Section -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-history"></i>
+        Company History
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>History Title</label>
+          <input type="text" name="history_title" value="{{ about.history_title }}" placeholder="History section title">
+        </div>
+        <div class="form-group">
+          <label>History Subtitle</label>
+          <input type="text" name="history_subtitle" value="{{ about.history_subtitle }}" placeholder="History section subtitle">
+        </div>
+        <div class="form-group">
+          <label>Paragraph 1</label>
+          <textarea name="history_p1" rows="4" placeholder="First paragraph">{{ about.history_p1 }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Paragraph 2</label>
+          <textarea name="history_p2" rows="4" placeholder="Second paragraph">{{ about.history_p2 }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Paragraph 3</label>
+          <textarea name="history_p3" rows="4" placeholder="Third paragraph">{{ about.history_p3 }}</textarea>
+        </div>
+
+        <h3 class="section-subtitle">
+          <i class="fas fa-bullseye"></i>
+          Mission & Vision
+        </h3>
+        <div class="form-group">
+          <label>Mission</label>
+          <textarea name="mission" rows="3" placeholder="Company mission">{{ about.mission }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Vision</label>
+          <textarea name="vision" rows="3" placeholder="Company vision">{{ about.vision }}</textarea>
+        </div>
+
+        <button type="submit" name="save_about" class="btn-primary">
+          <i class="fas fa-save"></i> Save About Content
+        </button>
+      </form>
+    </div>
+
+    <!-- Timeline Management -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-timeline"></i>
+        Timeline Management
+      </h2>
+
+      <!-- Add New Event -->
+      <div class="form-section">
+        <h3>
+          <i class="fas fa-plus-circle"></i>
+          Add New Event
+        </h3>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group">
+              <label>Year</label>
+              <input type="text" name="timeline_year" placeholder="e.g., 2026" required>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" name="timeline_desc" placeholder="What happened?" required>
+            </div>
+          </div>
+          <button type="submit" name="add_timeline" class="btn-success">
+            <i class="fas fa-plus"></i> Add Event
+          </button>
+        </form>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Existing Events -->
+      <div class="form-section">
+        <h3>
+          <i class="fas fa-list"></i>
+          Existing Events
+        </h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Description</th>
+                <th width="280">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in timeline %}
+              <tr>
+                <td><strong>{{ event.year }}</strong></td>
+                <td>{{ event.description }}</td>
+                <td>
+                  <div class="inline-forms">
+                    <form method="POST" class="inline-form">
+                      {% csrf_token %}
+                      <input type="hidden" name="edit_timeline_id" value="{{ event.id }}">
+                      <input type="text" name="timeline_year" value="{{ event.year }}" required class="inline-input">
+                      <input type="text" name="timeline_desc" value="{{ event.description }}" required class="inline-input">
+                      <button type="submit" name="edit_timeline" class="btn-edit-small">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </form>
+                    <form method="POST" class="inline-form">
+                      {% csrf_token %}
+                      <input type="hidden" name="delete_timeline_id" value="{{ event.id }}">
+                      <button type="submit" name="delete_timeline" class="btn-delete-small" onclick="return confirm('Are you sure you want to delete this event?')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="empty-row">No timeline events yet. Add your first event above.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leadership Team Management -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-users"></i>
+        Leadership Team
+      </h2>
+
+      <!-- Add New Team Member -->
+      <div class="form-section">
+        <h3>
+          <i class="fas fa-user-plus"></i>
+          Add New Team Member
+        </h3>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" name="team_name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+              <label>Role</label>
+              <input type="text" name="team_role" placeholder="Job Title" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea name="team_bio" rows="3" placeholder="Short bio" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Photo</label>
+            <input type="file" name="team_photo" accept="image/*" required>
+          </div>
+          <button type="submit" name="add_team_member" class="btn-success">
+            <i class="fas fa-plus"></i> Add Member
+          </button>
+        </form>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Existing Team Members -->
+      <div class="form-section">
+        <h3>
+          <i class="fas fa-list"></i>
+          Existing Team Members
+        </h3>
+        <div class="team-grid">
+          {% for member in team %}
+          <div class="team-card">
+            <div class="team-photo">
+              {% if member.photo %}
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}">
+              {% else %}
+                <div class="no-photo">
+                  <i class="fas fa-user-circle"></i>
+                </div>
+              {% endif %}
+            </div>
+            <div class="team-info">
+              <h4>{{ member.name }}</h4>
+              <p class="role">{{ member.role }}</p>
+              <p class="bio">{{ member.bio|truncatewords:30 }}</p>
+            </div>
+            <div class="team-actions">
+              <button class="btn-edit" onclick="openEditModal({{ member.id }}, '{{ member.name|escapejs }}', '{{ member.role|escapejs }}', '{{ member.bio|escapejs }}')">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <form method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="delete_team_member_id" value="{{ member.id }}">
+                <button type="submit" name="delete_team_member" class="btn-delete" onclick="return confirm('Are you sure you want to delete this team member?')">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </div>
+          {% empty %}
+          <p class="empty-message">No team members added yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Values -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-gem"></i>
+        Core Values
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="values-grid">
+          {% for cv in core_values %}
+          <div class="value-card">
+            <div class="value-number">{{ forloop.counter }}</div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="value_title" value="{{ cv.title }}" placeholder="Value title">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" name="value_desc" value="{{ cv.description }}" placeholder="Value description">
+            </div>
+          </div>
+          {% empty %}
+          <!-- Show 4 empty fields by default -->
+          {% for i in "1234" %}
+          <div class="value-card">
+            <div class="value-number">{{ forloop.counter }}</div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="value_title" placeholder="Value title">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" name="value_desc" placeholder="Value description">
+            </div>
+          </div>
+          {% endfor %}
+          {% endfor %}
+        </div>
+        <button type="submit" name="save_values" class="btn-primary">
+          <i class="fas fa-save"></i> Save Values
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Edit Team Member Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Edit Team Member</h3>
+      <span class="modal-close">&times;</span>
+    </div>
+    <form method="POST" enctype="multipart/form-data" id="editForm">
+      {% csrf_token %}
+      <input type="hidden" name="edit_team_member_id" id="edit_member_id">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="team_name" id="edit_name" required>
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <input type="text" name="team_role" id="edit_role" required>
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea name="team_bio" id="edit_bio" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>New Photo (optional)</label>
+        <input type="file" name="team_photo" accept="image/*">
+      </div>
+      <button type="submit" name="edit_team_member" class="btn-primary">Update Member</button>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'myApp/js/adminabout.js' %}"></script>
+</body>
+</html>

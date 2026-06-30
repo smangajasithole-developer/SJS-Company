@@ -2,128 +2,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SJS Company - Sign In</title>
-  <link rel="stylesheet" href="{% static 'myApp/css/signin.css' %}">
-
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | SJS Company</title>
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="{% static 'myApp/css/signin.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Header -->
-  <header class="navbar">
-    <div class="logo">
-      <i class="fas fa-truck"></i> <span class="orange">SJS</span> <span class="blue">Company</span>
+
+<!-- ============================================================ -->
+<!-- SIGN IN SECTION -->
+<!-- ============================================================ -->
+<section class="signin-section">
+    <div class="signin-container">
+        <!-- Icon -->
+        <div class="signin-icon-wrapper">
+            <i class="fas fa-truck"></i>
+        </div>
+
+        <!-- Header Text -->
+        <div class="signin-header">
+            <h1>Welcome Back</h1>
+            <p class="signin-subtitle">Sign in to your SJS Company account</p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message message-{{ message.tags }}">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'info' %}fa-info-circle{% else %}fa-bell{% endif %}"></i>
+                        {{ message }}
+                        <button type="button" class="message-close" onclick="this.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Sign In Form -->
+        <form method="POST" class="signin-form" autocomplete="off">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i> Username
+                </label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> Password
+                </label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required class="form-control">
+                    <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-options">
+                    <a href="{% url 'forgot_password' %}" class="forgot-link">
+                        <i class="fas fa-key"></i> Forgot password?
+                    </a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-signin">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+
+        <!-- Resend Verification -->
+        {% if show_resend %}
+            <div class="resend-section">
+                <hr class="divider">
+                <p class="resend-text">
+                    <i class="fas fa-envelope"></i> Didn't receive verification email?
+                </p>
+                <form method="POST" action="{% url 'resend_verification' %}" class="resend-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ pending_email }}">
+                    <button type="submit" class="btn-resend">
+                        <i class="fas fa-paper-plane"></i> Resend Verification Email
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+
+        <!-- Extra Links -->
+        <div class="extra-links">
+            <div class="link-item">
+                <i class="fas fa-user-plus"></i>
+                <p>Don't have an account? <a href="{% url 'signup' %}">Create one here <i class="fas fa-arrow-right"></i></a></p>
+            </div>
+        </div>
     </div>
-    <nav>
-      <ul class="nav-links">
-    <li><a href="{% url 'home' %}">Home</a></li>
-      <li><a href="{% url 'about' %}">About</a></li>
-      <li><a href="{% url 'services' %}">Services</a></li>
-      <li><a href="{% url 'careers' %}">Careers</a></li>
-      <li><a href="{% url 'contact' %}">Contact</a></li>
-      <li><a href="#" class="active">Sign In</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Sign In Section -->
-<!-- Sign In Section -->
-<section class="signin">
-  <div class="signin-container">
-
-    <div class="signin-icon">
-      <i class="fas fa-truck"></i>
-    </div>
-
-    <h2>Welcome Back</h2>
-    <p class="subtitle">Sign in to your SJS Company account</p>
-
-    {% if messages %}
-      {% for message in messages %}
-        <p style="color:red;">{{ message }}</p>
-      {% endfor %}
-    {% endif %}
-
-    <form method="POST" class="signin-form">
-      {% csrf_token %}
-
-      <input type="text" name="username" placeholder="Username" required>
-
-      <div class="password-row">
-        <input type="password" name="password" placeholder="Password" required>
-        <a href="#" class="forgot-link">Forgot password?</a>
-        <i class="fas fa-eye toggle-password"></i>
-      </div>
-
-      <button type="submit" class="btn-signin">Sign In</button>
-    </form>
-
-    <div class="extra-links">
-      <p>Don't have an account? <a href="{% url 'signup' %}">Create one here →</a></p>
-      <p>Are you HR staff? <a href="{% url 'hrsignin' %}">HR Portal Login →</a></p>
-    </div>
-
-  </div>
 </section>
 
-  
-<!-- Footer -->
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
 <footer class="footer">
-  <div class="footer-container">
-    <!-- Company Info -->
-    <div class="footer-box">
-      <h3>SJS Company</h3>
-      <p>Reliable logistics &amp; goods transportation across South Africa.</p>
+    <div class="footer-bottom">
+        <p>&copy; 2026 {{ footer.company_name|default:"SJS Company" }}. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
     </div>
-
-    <!-- Quick Links -->
-    <div class="footer-box">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'services' %}">Services</a></li>
-        <li><a href="{% url 'careers' %}">Careers</a></li>
-        <li><a href="{% url 'contact' %}">Contact</a></li>
-      </ul>
-    </div>
-
-    <!-- Services -->
-    <div class="footer-box">
-      <h4>Services</h4>
-      <ul>
-        <li>Goods Transportation</li>
-        <li>Warehouse Management</li>
-        <li>Fleet Management</li>
-        <li>Same-Day Delivery</li>
-      </ul>
-    </div>
-
-    <!-- Contact -->
-    <div class="footer-box">
-      <h4>Contact</h4>
-      <p><strong>Phone:</strong> +27 11 234 5678</p>
-      <p><strong>Email:</strong> info@sjscompany.co.za</p>
-      <p><strong>Location:</strong> Johannesburg, Gauteng</p>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <p>© 2026 SJS Company. All rights reserved.</p>
-    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-  </div>
 </footer>
 
-  <!-- Optional JS for password toggle -->
-  <script>
-    const togglePassword = document.querySelector('.toggle-password');
-    const passwordField = document.querySelector('input[name="password"]');
-    togglePassword.addEventListener('click', () => {
-      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordField.setAttribute('type', type);
-    });
-  </script>
+<!-- JavaScript -->
+<script src="{% static 'myApp/js/signin.js' %}"></script>
 </body>
 </html>

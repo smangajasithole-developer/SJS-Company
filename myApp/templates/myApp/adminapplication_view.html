@@ -1,0 +1,215 @@
+{% load static %}
+
+<div class="application-review-container">
+    <!-- ============================================ -->
+    <!-- LEFT PANEL: JOB INFORMATION                  -->
+    <!-- ============================================ -->
+    <div class="review-panel job-panel">
+        <h2>Job Information</h2>
+        <div class="review-content">
+            <h3>{{ application.job.job_title }}</h3>
+            <p><strong>Company:</strong> {{ application.job.company_name }}</p>
+            <p><strong>Location:</strong> {{ application.job.location }}</p>
+            <p><strong>Job Type:</strong> {{ application.job.job_type }}</p>
+            <p><strong>Work Hours:</strong> {{ application.job.work_hours }}</p>
+            <p><strong>Salary:</strong> {{ application.job.stipend }}</p>
+            
+            <hr>
+            
+            <h3>Requirements & Responsibilities</h3>
+            {% for content in job_contents %}
+                <h4>{{ content.topic_title }}</h4>
+                <p>{{ content.description }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- RIGHT PANEL: APPLICANT INFORMATION           -->
+    <!-- ============================================ -->
+    <div class="review-panel applicant-panel">
+        <h2>Applicant Information</h2>
+        <div class="review-content">
+            
+            <!-- ===== SECTION 1: PERSONAL DETAILS ===== -->
+            <h3>Personal Details</h3>
+            <p><strong>Name:</strong> {{ applicant.first_name }} {{ applicant.last_name }}</p>
+            <p><strong>Middle Name:</strong> {{ profile.middle_name|default:"Not provided" }}</p>
+            <p><strong>ID Number:</strong> {{ profile.id_number|default:"Not provided" }}</p>
+            <p><strong>Date of Birth:</strong> {{ profile.dob|default:"Not provided" }}</p>
+            <p><strong>Gender:</strong> {{ profile.gender|default:"Not provided" }}</p>
+            <p><strong>Race:</strong> {{ profile.race|default:"Not provided" }}</p>
+            <p><strong>Nationality:</strong> {{ profile.nationality|default:"Not provided" }}</p>
+            <p><strong>Marital Status:</strong> {{ profile.marital_status|default:"Not provided" }}</p>
+            
+            <hr>
+            
+            <!-- ===== SECTION 2: CONTACT DETAILS ===== -->
+            <h3>Contact Details</h3>
+            <p><strong>Email:</strong> {{ contact.email|default:applicant.email }}</p>
+            <p><strong>Primary Phone:</strong> {{ contact.phone_primary|default:"Not provided" }}</p>
+            <p><strong>Alternative Phone:</strong> {{ contact.phone_alternative|default:"Not provided" }}</p>
+            <p>
+                <strong>LinkedIn:</strong>
+                {% if contact.linkedin %}
+                    <a href="{{ contact.linkedin }}" target="_blank">View LinkedIn</a>
+                {% else %}
+                    Not provided
+                {% endif %}
+            </p>
+            <p>
+                <strong>Portfolio:</strong>
+                {% if contact.portfolio %}
+                    <a href="{{ contact.portfolio }}" target="_blank">View Portfolio</a>
+                {% else %}
+                    Not provided
+                {% endif %}
+            </p>
+            
+            <hr>
+            
+            <!-- ===== SECTION 3: ADDRESS DETAILS ===== -->
+            <h3>Address Details</h3>
+            <p><strong>Address:</strong> {{ profile.address|default:"Not provided" }}</p>
+            <p><strong>City:</strong> {{ profile.city|default:"Not provided" }}</p>
+            <p><strong>Province:</strong> {{ profile.province|default:"Not provided" }}</p>
+            <p><strong>Country:</strong> {{ profile.country|default:"Not provided" }}</p>
+            
+            <hr>
+            
+            <!-- ===== SECTION 4: EDUCATION ===== -->
+            <h3>Education</h3>
+            {% for edu in education %}
+                <div class="record-box">
+                    <strong>{{ edu.qualification }}</strong><br>
+                    Institution: {{ edu.school_name }}<br>
+                    Level: {{ edu.qualification_level }}<br>
+                    Period: {{ edu.start_date }} - {{ edu.end_date }}
+                </div>
+            {% empty %}
+                <p>No education records provided.</p>
+            {% endfor %}
+            
+            <hr>
+            
+            <!-- ===== SECTION 5: WORK EXPERIENCE ===== -->
+            <h3>Work Experience</h3>
+            {% for work in work_experience %}
+                <div class="record-box">
+                    <strong>{{ work.job_title }}</strong><br>
+                    Company: {{ work.company }}<br>
+                    Period: {{ work.start_date }} - {% if work.currently_working %}Present{% else %}{{ work.end_date }}{% endif %}<br>
+                    Description:<br>
+                    {{ work.description }}
+                    {% if work.reason_for_leaving %}
+                        <br>Reason For Leaving: {{ work.reason_for_leaving }}
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No work experience provided.</p>
+            {% endfor %}
+            
+            <hr>
+            
+            <!-- ===== SECTION 6: DOCUMENTS ===== -->
+            <h3>Documents</h3>
+            {% if attachments %}
+                {% if attachments.resume %}
+                    <p>
+                        <strong>Resume:</strong>
+                        <a href="#" onclick="openDocumentViewer('{{ attachments.resume.url }}','Resume'); return false;">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        |
+                        <a href="{{ attachments.resume.url }}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </p>
+                {% endif %}
+
+                {% if attachments.id_document %}
+                    <p>
+                        <strong>ID Document:</strong>
+                        <a href="#" onclick="openDocumentViewer('{{ attachments.id_document.url }}','ID Document'); return false;">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        |
+                        <a href="{{ attachments.id_document.url }}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </p>
+                {% endif %}
+
+                {% if attachments.matric_certificate %}
+                    <p>
+                        <strong>Matric Certificate:</strong>
+                        <a href="#" onclick="openDocumentViewer('{{ attachments.matric_certificate.url }}','Matric Certificate'); return false;">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        |
+                        <a href="{{ attachments.matric_certificate.url }}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </p>
+                {% endif %}
+            {% else %}
+                <p>No documents uploaded.</p>
+            {% endif %}
+            
+            <hr>
+            
+            <!-- ===== SECTION 7: ADDITIONAL QUALIFICATIONS ===== -->
+            <h3>Additional Qualifications</h3>
+            {% for qualification in qualification_documents %}
+                <div class="record-box">
+                    <strong>{{ qualification.qualification_name }}</strong>
+                    <br>
+                    Uploaded: {{ qualification.uploaded_at|date:"d M Y" }}
+                    <br>
+                    {% if qualification.certificate %}
+                        <a href="#" onclick="openDocumentViewer('{{ qualification.certificate.url }}','{{ qualification.qualification_name }}'); return false;">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        |
+                        <a href="{{ qualification.certificate.url }}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No qualification documents uploaded.</p>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- DOCUMENT VIEWER MODAL                        -->
+<!-- ============================================ -->
+<div id="documentViewerModal" class="document-modal">
+    <div class="document-modal-content">
+        <div class="document-header">
+            <h3 id="documentTitle">Document Viewer</h3>
+            <span class="close-document" onclick="closeDocumentViewer()">&times;</span>
+        </div>
+        <div class="document-body">
+            <!-- iframe will be dynamically created by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- ADMIN APPROVAL SECTION                       -->
+<!-- ============================================ -->
+<div class="application-decision">
+    <h3>Admin Approval</h3>
+    <p>Review the candidate information and approve the application for the next recruitment stage.</p>
+    <form method="POST" action="{% url 'adminapprove_application' application.id %}">
+        {% csrf_token %}
+        <button type="submit" class="approve-btn">
+            <i class="fas fa-check-circle"></i>
+            Approve Candidate
+        </button>
+    </form>
+</div>

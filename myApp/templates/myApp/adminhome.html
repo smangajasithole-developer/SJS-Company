@@ -1,0 +1,392 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Home - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/adminhome.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-house"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- Home Hero Section -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-star"></i>
+        Home Hero Section
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="title" value="{{ homehero.title }}" placeholder="Enter hero title">
+        </div>
+        <div class="form-group">
+          <label>Subtitle</label>
+          <input type="text" name="subtitle" value="{{ homehero.subtitle }}" placeholder="Enter hero subtitle">
+        </div>
+        <div class="form-group">
+          <label>Coverage</label>
+          <input type="text" name="coverage" value="{{ homehero.coverage }}" placeholder="Coverage area">
+        </div>
+        <button type="submit" name="update_homehero" class="btn-primary">
+          <i class="fas fa-save"></i> Save Hero
+        </button>
+      </form>
+    </div>
+
+    <!-- Home About Section -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-info-circle"></i>
+        Home About Section
+      </h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="title" value="{{ homeabout.title }}" placeholder="About section title">
+        </div>
+        <div class="form-group">
+          <label>Subtitle</label>
+          <input type="text" name="subtitle" value="{{ homeabout.subtitle }}" placeholder="About section subtitle">
+        </div>
+        <div class="form-group">
+          <label>Paragraph 1</label>
+          <textarea name="paragraph1" rows="4" placeholder="First paragraph">{{ homeabout.paragraph1 }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Paragraph 2</label>
+          <textarea name="paragraph2" rows="4" placeholder="Second paragraph">{{ homeabout.paragraph2 }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <input type="file" name="image" accept="image/*">
+          {% if homeabout.image %}
+            <div class="image-preview">
+              <img src="{{ homeabout.image.url }}" alt="About image">
+            </div>
+          {% endif %}
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Years of Experience</label>
+            <input type="text" name="years" value="{{ homeabout.years }}" placeholder="Years">
+          </div>
+          <div class="form-group">
+            <label>Vehicles</label>
+            <input type="text" name="vehicles" value="{{ homeabout.vehicles }}" placeholder="Number of vehicles">
+          </div>
+          <div class="form-group">
+            <label>Deliveries</label>
+            <input type="text" name="deliveries" value="{{ homeabout.deliveries }}" placeholder="Deliveries count">
+          </div>
+        </div>
+        <button type="submit" name="update_homeabout" class="btn-primary">
+          <i class="fas fa-save"></i> Save About
+        </button>
+      </form>
+    </div>
+
+    <!-- Home Services Section Title/Subtitle -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-cogs"></i>
+        Home Services Section
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Section Title</label>
+          <input type="text" name="section_title" value="{{ homeservices.section_title }}" placeholder="Services section title">
+        </div>
+        <div class="form-group">
+          <label>Section Subtitle</label>
+          <input type="text" name="section_subtitle" value="{{ homeservices.section_subtitle }}" placeholder="Services section subtitle">
+        </div>
+        <button type="submit" name="update_homeservices" class="btn-primary">
+          <i class="fas fa-save"></i> Save Section
+        </button>
+      </form>
+    </div>
+
+    <!-- Add New Service Box -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-plus-circle"></i>
+        Add New Service Box
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Icon</label>
+          <select name="icon" class="form-select">
+            <option value="fas fa-truck">🚚 Truck</option>
+            <option value="fas fa-box">📦 Box</option>
+            <option value="fas fa-warehouse">🏭 Warehouse</option>
+            <option value="fas fa-shipping-fast">⚡ Fast Shipping</option>
+            <option value="fas fa-cogs">⚙️ Cogs</option>
+            <option value="fas fa-users">👥 Users</option>
+            <option value="fas fa-shield-alt">🛡️ Shield</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="item_title" placeholder="Service title">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="item_desc" rows="3" placeholder="Service description"></textarea>
+        </div>
+        <button type="submit" name="add_service_item" class="btn-success">
+          <i class="fas fa-plus"></i> Add Service
+        </button>
+      </form>
+    </div>
+
+    <!-- Existing Service Boxes -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-list"></i>
+        Existing Service Boxes
+      </h2>
+      <div class="items-list">
+        {% for item in service_items %}
+        <div class="item-card">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Icon</label>
+              <select name="icon" class="form-select">
+                <option value="fas fa-truck" {% if item.icon == "fas fa-truck" %}selected{% endif %}>🚚 Truck</option>
+                <option value="fas fa-box" {% if item.icon == "fas fa-box" %}selected{% endif %}>📦 Box</option>
+                <option value="fas fa-warehouse" {% if item.icon == "fas fa-warehouse" %}selected{% endif %}>🏭 Warehouse</option>
+                <option value="fas fa-shipping-fast" {% if item.icon == "fas fa-shipping-fast" %}selected{% endif %}>⚡ Fast Shipping</option>
+                <option value="fas fa-cogs" {% if item.icon == "fas fa-cogs" %}selected{% endif %}>⚙️ Cogs</option>
+                <option value="fas fa-users" {% if item.icon == "fas fa-users" %}selected{% endif %}>👥 Users</option>
+                <option value="fas fa-shield-alt" {% if item.icon == "fas fa-shield-alt" %}selected{% endif %}>🛡️ Shield</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="item_title" value="{{ item.title }}">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="item_desc" rows="2">{{ item.description }}</textarea>
+            </div>
+            <div class="btn-group">
+              <button type="submit" name="edit_service_item" value="{{ item.id }}" class="btn-edit">
+                <i class="fas fa-edit"></i> Update
+              </button>
+              <button type="submit" name="delete_service_item" value="{{ item.id }}" class="btn-delete" onclick="return confirm('Delete this service?')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </form>
+        </div>
+        {% empty %}
+        <p class="empty-message">No service boxes added yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Why Choose Us Section Title/Subtitle -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-question-circle"></i>
+        Why Choose Us Section
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Section Title</label>
+          <input type="text" name="why_title" value="{{ homewhy.section_title }}" placeholder="Why choose us title">
+        </div>
+        <div class="form-group">
+          <label>Section Subtitle</label>
+          <input type="text" name="why_subtitle" value="{{ homewhy.section_subtitle }}" placeholder="Why choose us subtitle">
+        </div>
+        <button type="submit" name="update_homewhy" class="btn-primary">
+          <i class="fas fa-save"></i> Save Section
+        </button>
+      </form>
+    </div>
+
+    <!-- Add New Why Box -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-plus-circle"></i>
+        Add New Why Box
+      </h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Icon</label>
+          <select name="why_icon" class="form-select">
+            <option value="fas fa-truck">🚚 Truck</option>
+            <option value="fas fa-id-card">🪪 ID Card</option>
+            <option value="fas fa-map-marker-alt">📍 Location</option>
+            <option value="fas fa-headset">🎧 Support</option>
+            <option value="fas fa-shield-alt">🛡️ Security</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="why_item_title" placeholder="Why box title">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="why_item_desc" rows="3" placeholder="Why box description"></textarea>
+        </div>
+        <button type="submit" name="add_why_item" class="btn-success">
+          <i class="fas fa-plus"></i> Add Why Box
+        </button>
+      </form>
+    </div>
+
+    <!-- Existing Why Boxes -->
+    <div class="admin-card">
+      <h2>
+        <i class="fas fa-list"></i>
+        Existing Why Boxes
+      </h2>
+      <div class="items-list">
+        {% for item in why_items %}
+        <div class="item-card">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Icon</label>
+              <select name="why_icon" class="form-select">
+                <option value="fas fa-truck" {% if item.icon == "fas fa-truck" %}selected{% endif %}>🚚 Truck</option>
+                <option value="fas fa-id-card" {% if item.icon == "fas fa-id-card" %}selected{% endif %}>🪪 ID Card</option>
+                <option value="fas fa-map-marker-alt" {% if item.icon == "fas fa-map-marker-alt" %}selected{% endif %}>📍 Location</option>
+                <option value="fas fa-headset" {% if item.icon == "fas fa-headset" %}selected{% endif %}>🎧 Support</option>
+                <option value="fas fa-shield-alt" {% if item.icon == "fas fa-shield-alt" %}selected{% endif %}>🛡️ Security</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="why_item_title" value="{{ item.title }}">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="why_item_desc" rows="2">{{ item.description }}</textarea>
+            </div>
+            <div class="btn-group">
+              <button type="submit" name="edit_why_item" value="{{ item.id }}" class="btn-edit">
+                <i class="fas fa-edit"></i> Update
+              </button>
+              <button type="submit" name="delete_why_item" value="{{ item.id }}" class="btn-delete" onclick="return confirm('Delete this item?')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </form>
+        </div>
+        {% empty %}
+        <p class="empty-message">No why boxes added yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="{% static 'myApp/js/adminhome.js' %}"></script>
+</body>
+</html>

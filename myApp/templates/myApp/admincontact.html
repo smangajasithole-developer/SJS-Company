@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Contact - SJS Company</title>
+  <link rel="stylesheet" href="{% static 'myApp/css/admincontact.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="admin-topbar">
+
+  <div class="topbar-left">
+    {{ header.company_name|default:"SJS Company" }}
+  </div>
+
+  <div class="topbar-center">
+    <i class="fas fa-envelope"></i>
+  </div>
+
+  <div class="topbar-right">
+    {% if user.is_authenticated %}
+      {{ user.first_name }} {{ user.last_name }}
+    {% else %}
+      Admin
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Layout Wrapper -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+<a href="{% url 'admindashboard' %}" class="{% if request.resolver_match.url_name == 'admindashboard' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{% url 'adminusers' %}" class="{% if request.resolver_match.url_name == 'adminusers' %}active{% endif %}">
+    <i class="fas fa-users"></i>
+    <span>Users</span>
+</a>
+
+<a href="{% url 'adminaccepted_candidate' %}" class="{% if request.resolver_match.url_name == 'adminaccepted_candidate' %}active{% endif %}">
+    <i class="fas fa-user-check"></i>
+    <span>Accepted Candidates</span>
+</a>
+
+<a href="{% url 'adminheader' %}" class="{% if request.resolver_match.url_name == 'adminheader' %}active{% endif %}">
+    <i class="fas fa-window-maximize"></i>
+    <span>Header</span>
+</a>
+
+<a href="{% url 'adminherophotos' %}" class="{% if request.resolver_match.url_name == 'adminherophotos' %}active{% endif %}">
+    <i class="fas fa-images"></i>
+    <span>Hero Photos</span>
+</a>
+
+<a href="{% url 'adminhome' %}" class="{% if request.resolver_match.url_name == 'adminhome' %}active{% endif %}">
+    <i class="fas fa-house"></i>
+    <span>Home</span>
+</a>
+
+<a href="{% url 'adminabout' %}" class="{% if request.resolver_match.url_name == 'adminabout' %}active{% endif %}">
+    <i class="fas fa-circle-info"></i>
+    <span>About</span>
+</a>
+
+<a href="{% url 'adminservices' %}" class="{% if request.resolver_match.url_name == 'adminservices' %}active{% endif %}">
+    <i class="fas fa-gears"></i>
+    <span>Services</span>
+</a>
+
+<a href="{% url 'admincareers' %}" class="{% if request.resolver_match.url_name == 'admincareers' %}active{% endif %}">
+    <i class="fas fa-briefcase"></i>
+    <span>Careers</span>
+</a>
+
+<a href="{% url 'admincontact' %}" class="{% if request.resolver_match.url_name == 'admincontact' %}active{% endif %}">
+    <i class="fas fa-envelope"></i>
+    <span>Contact</span>
+</a>
+
+<a href="{% url 'adminfooter' %}" class="{% if request.resolver_match.url_name == 'adminfooter' %}active{% endif %}">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Footer</span>
+</a>
+
+<a href="{% url 'signout' %}">
+    <i class="fas fa-right-from-bracket"></i>
+    <span>Sign Out</span>
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Contact Page Manager</h1>
+      <p>Manage contact page hero section and contact information boxes.</p>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- HERO EDIT SECTION -->
+    <!-- ===================================================== -->
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-star"></i>
+          Contact Page Hero
+        </h2>
+        <p>Edit main hero text displayed on the contact page</p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tagline</label>
+            <input type="text" name="tagline" value="{{ hero.tagline }}" placeholder="Enter hero tagline">
+          </div>
+          <div class="form-group">
+            <label>Hero Title</label>
+            <input type="text" name="hero_title" value="{{ hero.hero_title }}" placeholder="Enter hero title">
+          </div>
+        </div>
+        <button type="submit" name="update_hero" class="btn-primary">
+          <i class="fas fa-save"></i> Save Hero Section
+        </button>
+      </form>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- INFO BOXES SECTION -->
+    <!-- ===================================================== -->
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-info-circle"></i>
+          Contact Info Boxes
+        </h2>
+        <p>Add, edit or remove contact information blocks</p>
+      </div>
+
+      <!-- ADD NEW BOX -->
+      <div class="add-box-section">
+        <h3>
+          <i class="fas fa-plus-circle"></i>
+          Add New Contact Box
+        </h3>
+        <form method="POST" class="add-box-form">
+          {% csrf_token %}
+          <div class="form-inline">
+            <input type="text" name="box_title" placeholder="Box Title (e.g., CALL US, EMAIL US, OFFICE)" required>
+            <button type="submit" name="add_box" class="btn-success">
+              <i class="fas fa-plus"></i> Add Box
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- BOX LIST -->
+      <div class="box-grid">
+        {% for box in contact_boxes %}
+          <div class="info-box-card">
+            <!-- BOX HEADER -->
+            <div class="box-header">
+              <div class="box-title-section">
+                <i class="fas fa-folder-open"></i>
+                <form method="POST" class="inline-form edit-title-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="box_id" value="{{ box.id }}">
+                  <input type="text" name="edit_box_title" value="{{ box.title }}" class="box-title-input">
+                  <button type="submit" name="edit_box" class="btn-edit-small" title="Save title">
+                    <i class="fas fa-save"></i>
+                  </button>
+                </form>
+              </div>
+              <form method="POST" class="inline-form">
+                {% csrf_token %}
+                <input type="hidden" name="delete_box_id" value="{{ box.id }}">
+                <button type="submit" name="delete_box" class="btn-delete-small" onclick="return confirm('Delete this contact box and all its content?')">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+
+            <!-- BOX CONTENT - PARAGRAPHS -->
+            <div class="box-content">
+              <h4><i class="fas fa-paragraph"></i> Content Items</h4>
+              {% for item in box.descriptions.all %}
+                <div class="paragraph-row">
+                  <form method="POST" class="inline-form edit-item-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <input type="text" name="edit_text" value="{{ item.text }}" class="item-text-input">
+                    <button type="submit" name="edit_item" class="btn-edit-small" title="Save item">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </form>
+                  <form method="POST" class="inline-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_item_id" value="{{ item.id }}">
+                    <button type="submit" name="delete_item" class="btn-delete-small" onclick="return confirm('Delete this item?')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </div>
+              {% empty %}
+                <p class="empty-message-small">No content items yet. Add one below.</p>
+              {% endfor %}
+            </div>
+
+            <!-- ADD PARAGRAPH -->
+            <div class="add-paragraph-section">
+              <form method="POST" class="add-paragraph-form">
+                {% csrf_token %}
+                <input type="hidden" name="box_id" value="{{ box.id }}">
+                <div class="form-inline">
+                  <input type="text" name="text" placeholder="Add new line..." required>
+                  <button type="submit" name="add_paragraph" class="btn-info">
+                    <i class="fas fa-plus"></i> Add Item
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p class="empty-message">No contact boxes available. Create your first box above.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="{% static 'myApp/js/admincontact.js' %}"></script>
+</body>
+</html>

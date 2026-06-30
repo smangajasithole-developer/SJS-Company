@@ -1,0 +1,343 @@
+<!-- ============================================================ -->
+<!-- APPLICANT PROFILE – Two-Column Layout                         -->
+<!-- ============================================================ -->
+
+<h2 class="profile-title">
+    <i class="fas fa-user-circle"></i>
+    Applicant Profile
+</h2>
+
+<hr class="profile-divider">
+
+<!-- ============================================================ -->
+<!-- PROFILE GRID (2 columns)                                      -->
+<!-- ============================================================ -->
+<div class="profile-grid">
+
+    <!-- ==================== LEFT COLUMN ==================== -->
+    <div class="profile-col-left">
+
+        <!-- ---------- PERSONAL DETAILS ---------- -->
+        <section class="profile-section">
+            <h3><i class="fas fa-id-badge"></i> Personal Details</h3>
+
+            <div class="profile-field">
+                <span class="field-label">First Name:</span>
+                <span class="field-value">{{ applicant.first_name|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Middle Name:</span>
+                <span class="field-value">{{ profile.middle_name|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Last Name:</span>
+                <span class="field-value">{{ applicant.last_name|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">ID Number:</span>
+                <span class="field-value">{{ profile.id_number|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Date of Birth:</span>
+                <span class="field-value">{{ profile.dob|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Gender:</span>
+                <span class="field-value">{{ profile.gender|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Race:</span>
+                <span class="field-value">{{ profile.race|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Nationality:</span>
+                <span class="field-value">{{ profile.nationality|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Marital Status:</span>
+                <span class="field-value">{{ profile.marital_status|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Address:</span>
+                <span class="field-value">{{ profile.address|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">City:</span>
+                <span class="field-value">{{ profile.city|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Province:</span>
+                <span class="field-value">{{ profile.province|default:"Not specified" }}</span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Country:</span>
+                <span class="field-value">{{ profile.country|default:"Not specified" }}</span>
+            </div>
+        </section>
+
+        <!-- ---------- CONTACT DETAILS ---------- -->
+        <section class="profile-section">
+            <h3><i class="fas fa-address-card"></i> Contact Details</h3>
+
+            <div class="profile-field">
+                <span class="field-label">Email:</span>
+                <span class="field-value">
+                    {% if contact %}
+                        {{ contact.email|default:"Not specified" }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Primary Phone:</span>
+                <span class="field-value">
+                    {% if contact %}
+                        {{ contact.phone_primary|default:"Not specified" }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Alternative Phone:</span>
+                <span class="field-value">
+                    {% if contact %}
+                        {{ contact.phone_alternative|default:"Not specified" }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">LinkedIn:</span>
+                <span class="field-value">
+                    {% if contact and contact.linkedin %}
+                        <a href="{{ contact.linkedin }}" target="_blank" class="profile-link">
+                            <i class="fab fa-linkedin"></i> {{ contact.linkedin }}
+                        </a>
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="profile-field">
+                <span class="field-label">Portfolio:</span>
+                <span class="field-value">
+                    {% if contact and contact.portfolio %}
+                        <a href="{{ contact.portfolio }}" target="_blank" class="profile-link">
+                            <i class="fas fa-globe"></i> {{ contact.portfolio }}
+                        </a>
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </span>
+            </div>
+        </section>
+
+        <!-- ---------- EDUCATION ---------- -->
+        <section class="profile-section">
+            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+
+            {% if education %}
+                {% for edu in education %}
+                    <div class="education-item">
+                        <div class="profile-field">
+                            <span class="field-label">School Name:</span>
+                            <span class="field-value">{{ edu.school_name|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Qualification:</span>
+                            <span class="field-value">{{ edu.qualification|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Level:</span>
+                            <span class="field-value">{{ edu.qualification_level|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Start Date:</span>
+                            <span class="field-value">{{ edu.start_date|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">End Date:</span>
+                            <span class="field-value">{{ edu.end_date|default:"Not specified" }}</span>
+                        </div>
+                        {% if not forloop.last %}<hr class="item-divider">{% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">No education records added.</p>
+            {% endif %}
+        </section>
+
+    </div>
+
+    <!-- ==================== RIGHT COLUMN ==================== -->
+    <div class="profile-col-right">
+
+        <!-- ---------- WORK EXPERIENCE ---------- -->
+        <section class="profile-section">
+            <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+
+            {% if work_experience %}
+                {% for work in work_experience %}
+                    <div class="work-item">
+                        <div class="profile-field">
+                            <span class="field-label">Job Title:</span>
+                            <span class="field-value">{{ work.job_title|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Company:</span>
+                            <span class="field-value">{{ work.company|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Description:</span>
+                            <span class="field-value">{{ work.description|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Start Date:</span>
+                            <span class="field-value">{{ work.start_date|default:"Not specified" }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">End Date:</span>
+                            <span class="field-value">
+                                {% if work.end_date %}
+                                    {{ work.end_date }}
+                                {% else %}
+                                    <span class="badge-present">Present</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Status:</span>
+                            <span class="field-value">
+                                {% if work.currently_working %}
+                                    <span class="badge-working">Currently Working</span>
+                                {% else %}
+                                    <span class="badge-left">Left Company</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% if work.reason_for_leaving %}
+                            <div class="profile-field">
+                                <span class="field-label">Reason for Leaving:</span>
+                                <span class="field-value">{{ work.reason_for_leaving }}</span>
+                            </div>
+                        {% endif %}
+                        {% if not forloop.last %}<hr class="item-divider">{% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">No work experience added.</p>
+            {% endif %}
+        </section>
+
+        <!-- ---------- DOCUMENTS ---------- -->
+        <section class="profile-section">
+            <h3><i class="fas fa-file-alt"></i> Documents</h3>
+
+            <div class="documents-list">
+                <div class="profile-field">
+                    <span class="field-label">Resume:</span>
+                    <span class="field-value">
+                        {% if attachments and attachments.resume %}
+                            <a href="{{ attachments.resume.url }}" target="_blank" class="doc-link">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="{{ attachments.resume.url }}" download class="doc-link">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <span class="not-uploaded">Not uploaded</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="profile-field">
+                    <span class="field-label">ID Document:</span>
+                    <span class="field-value">
+                        {% if attachments and attachments.id_document %}
+                            <a href="{{ attachments.id_document.url }}" target="_blank" class="doc-link">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="{{ attachments.id_document.url }}" download class="doc-link">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <span class="not-uploaded">Not uploaded</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="profile-field">
+                    <span class="field-label">Matric Certificate:</span>
+                    <span class="field-value">
+                        {% if attachments and attachments.matric_certificate %}
+                            <a href="{{ attachments.matric_certificate.url }}" target="_blank" class="doc-link">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="{{ attachments.matric_certificate.url }}" download class="doc-link">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <span class="not-uploaded">Not uploaded</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <h4><i class="fas fa-certificate"></i> Qualification Certificates</h4>
+
+            {% if qualification_documents %}
+                {% for doc in qualification_documents %}
+                    <div class="qualification-item">
+                        <div class="profile-field">
+                            <span class="field-label">Certificate:</span>
+                            <span class="field-value">
+                                <strong>{{ doc.qualification_name|default:"Certificate" }}</strong>
+                            </span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">File:</span>
+                            <span class="field-value">
+                                {% if doc.certificate %}
+                                    <a href="{{ doc.certificate.url }}" target="_blank" class="doc-link">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="{{ doc.certificate.url }}" download class="doc-link">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                {% else %}
+                                    <span class="not-uploaded">Not uploaded</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% if not forloop.last %}<hr class="item-divider">{% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-message">No qualification certificates uploaded.</p>
+            {% endif %}
+        </section>
+
+    </div>
+
+</div>
