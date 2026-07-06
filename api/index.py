@@ -1,11 +1,12 @@
 import os
+from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault(
     "DJANGO_SETTINGS_MODULE",
     "myProject.settings.production"
 )
 
-from myProject.wsgi import application
+application = get_wsgi_application()
 
-def handler(request, context):
-    return application(request, context)
+def handler(request):
+    return application(request)

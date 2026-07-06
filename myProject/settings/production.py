@@ -1,5 +1,10 @@
 from .base import *
+
+import os
+from dotenv import load_dotenv
 import dj_database_url
+
+load_dotenv(BASE_DIR / ".env")
 
 DEBUG = False
 
@@ -25,3 +30,17 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+MIDDLEWARE.insert(
+    1,
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+)

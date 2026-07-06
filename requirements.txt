@@ -48,6 +48,7 @@ PyJWT==2.8.0
 pyparsing==3.1.2
 Pyrebase4==4.8.0
 pyrebase5==5.0.1
+python-dotenv==1.2.2
 python-jwt==4.1.0
 requests==2.32.2
 requests-toolbelt==0.10.1
@@ -60,3 +61,4 @@ uritemplate==4.1.1
 urllib3==1.26.18
 virtualenv==20.26.2
 Werkzeug==3.0.3
+whitenoise==6.12.0
