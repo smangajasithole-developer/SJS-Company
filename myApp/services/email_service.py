@@ -1,6 +1,10 @@
 import requests
 from django.conf import settings
 
+from django.utils import timezone
+from myApp.models import EmailVerification
+
+
 
 def send_brevo_email(to_email, subject, html_content):
     url = "https://api.brevo.com/v3/smtp/email"
@@ -29,19 +33,6 @@ def send_brevo_email(to_email, subject, html_content):
     return response.status_code, response.text
 
 
-
-
-
-
-from django.conf import settings
-from django.utils import timezone
-from myApp.models import EmailVerification
-import requests
-
-
-
-import requests
-from django.conf import settings
 
 
 def send_verification_email(user, token, request):

@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get(
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
+ 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -47,4 +47,24 @@ STORAGES = {
 MIDDLEWARE.insert(
     1,
     "whitenoise.middleware.WhiteNoiseMiddleware",
+)
+
+
+
+
+
+# =====================================================
+# BREVO EMAIL CONFIGURATION
+# =====================================================
+
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    "noreply@sjscompany.co.za"
+)
+
+ADMIN_NOTIFICATION_EMAIL = os.environ.get(
+    "ADMIN_NOTIFICATION_EMAIL",
+    "smangajsithole@gmail.com"
 )
