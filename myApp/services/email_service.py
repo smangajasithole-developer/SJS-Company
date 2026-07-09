@@ -213,9 +213,11 @@ def send_password_changed_email(user):
 
 
 
-
 def send_new_signup_admin_email(user):
+    print("========================================")
     print("🔥 ADMIN SIGNUP EMAIL FUNCTION CALLED")
+    print("🔥 TO:", settings.ADMIN_NOTIFICATION_EMAIL)
+    print("🔥 FROM:", settings.DEFAULT_FROM_EMAIL)
 
     url = "https://api.brevo.com/v3/smtp/email"
 
@@ -261,13 +263,6 @@ def send_new_signup_admin_email(user):
                     <td>{user.usercategory}</td>
                 </tr>
             </table>
-
-            <br>
-
-            <p>
-                This notification was generated automatically by the
-                SJS Company registration system.
-            </p>
         """
     }
 
@@ -277,11 +272,11 @@ def send_new_signup_admin_email(user):
         headers=headers
     )
 
-    print("🔥 ADMIN SIGNUP EMAIL STATUS:", response.status_code)
-    print("🔥 ADMIN SIGNUP EMAIL RESPONSE:", response.text)
+    print("🔥 STATUS:", response.status_code)
+    print("🔥 RESPONSE:", response.text)
+    print("========================================")
 
     return response.status_code
-
 
 
 
