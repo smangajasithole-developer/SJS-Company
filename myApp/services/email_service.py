@@ -211,44 +211,17 @@ def send_password_changed_email(user):
     return response.status_code
 
 
-
 def send_new_signup_admin_email(user):
-    url = "https://api.brevo.com/v3/smtp/email"
-
-    headers = {
-        "api-key": settings.BREVO_API_KEY,
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "sender": {
-            "name": "SJS Company Notifications",
-            "email": settings.DEFAULT_FROM_EMAIL
-        },
-        "to": [
-            {
-                "email": settings.ADMIN_NOTIFICATION_EMAIL
-            }
-        ],
-        "subject": "New User Registration",
-        "htmlContent": f"""
+    return send_brevo_email(
+        to_email="smangajsithole@gmail.com",
+        subject="New User Registration",
+        html_content=f"""
             <h2>New User Registration</h2>
 
-            <p>A new user has verified their email address and activated their account.</p>
+            <p>A new user has verified their email address.</p>
 
-            <p>{user.first_name}</p>
+            <p><b>Name:</b> {user.first_name} {user.last_name}</p>
+            <p><b>Email:</b> {user.email}</p>
+            <p><b>Role:</b> {user.usercategory}</p>
         """
-    }
-
-    response = requests.post(
-        url,
-        json=data,
-        headers=headers
     )
-
-    if response.status_code != 201:
-        raise Exception(
-            f"BREVO ERROR {response.status_code}: {response.text}"
-        )
-
-    return response.status_code
