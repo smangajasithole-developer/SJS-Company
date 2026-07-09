@@ -192,7 +192,7 @@ def send_password_changed_email(user):
     data = {
         "sender": {
             "name": "SJS Company Security",
-            "email": settings.DEFAULT_FROM_EMAIL
+            "email": "smangajsithole@gmail.com"
         },
         "to": [{"email": user.email}],
         "subject": "Password Changed Successfully",
