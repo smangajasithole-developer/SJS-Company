@@ -69,6 +69,10 @@ def clear_messages(request):
 # 1. AUTHENTICATION - SIGNUP
 # =====================================================
 
+# =====================================================
+# 1. AUTHENTICATION - SIGNUP
+# =====================================================
+
 def signup(request):
     if request.method == "POST":
         firstname = request.POST.get("firstname")
@@ -93,7 +97,7 @@ def signup(request):
                 password=password,
                 first_name=firstname,
                 last_name=lastname,
-                usercategory='customer',
+                usercategory="customer",
                 is_active=False
             )
 
@@ -102,22 +106,16 @@ def signup(request):
                 user=user
             )
 
-            # Send verification email to user
+            # Send verification email
             send_verification_email(
                 user=user,
                 token=verification.token,
                 request=request
             )
 
-            # Notify admin about new signup
-            try:
-                send_new_signup_admin_email(user)
-            except Exception as e:
-                print("🔥 ADMIN NOTIFICATION ERROR:", e)
-
-            # Force resend verification section on signin page
-            request.session['just_signed_up'] = True
-            request.session['pending_verification_email'] = email
+            # Show resend verification section on signin page
+            request.session["just_signed_up"] = True
+            request.session["pending_verification_email"] = email
 
         except Exception as e:
             messages.error(
@@ -128,7 +126,7 @@ def signup(request):
                 request,
                 "myApp/signup.html"
             )
-        
+
         clear_messages(request)
 
         messages.success(
@@ -136,7 +134,7 @@ def signup(request):
             "Verification email sent. Please check your email to activate your account."
         )
 
-        return redirect('signin')
+        return redirect("signin")
 
     return render(
         request,

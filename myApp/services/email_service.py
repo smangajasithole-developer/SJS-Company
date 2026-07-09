@@ -238,7 +238,7 @@ def send_new_signup_admin_email(user):
         "htmlContent": f"""
             <h2>New User Registration</h2>
 
-            <p>A new user has created an account on SJS Company.</p>
+            <p>A new user has verified their email address and activated their SJS Company account.</p>
 
             <table border="1" cellpadding="8" cellspacing="0">
                 <tr>
