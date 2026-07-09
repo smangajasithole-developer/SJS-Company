@@ -303,12 +303,12 @@ def verify_email(request, token):
         # check if already verified
         if verification.is_verified:
             messages.info(request, "Account already verified. Please sign in.")
-            return redirect('signin')
+            return redirect("signin")
 
         # check expiry
         if verification.expires_at < timezone.now():
             messages.error(request, "Verification link expired.")
-            return redirect('signin')
+            return redirect("signin")
 
         # activate user
         user = verification.user
@@ -319,15 +319,28 @@ def verify_email(request, token):
         verification.is_verified = True
         verification.save()
 
-        # 🎉 SEND WELCOME EMAIL (NEW STEP)
-        send_welcome_email(user)
+        # 🎉 Send welcome email
+        try:
+            send_welcome_email(user)
+        except Exception as e:
+            print("🔥 WELCOME EMAIL ERROR:", e)
 
-        messages.success(request, "Email verified successfully. You can now sign in.")
-        return redirect('signin')
+        # 📧 Notify admin of newly verified account
+        try:
+            send_new_signup_admin_email(user)
+        except Exception as e:
+            print("🔥 ADMIN EMAIL ERROR:", e)
+
+        messages.success(
+            request,
+            "Email verified successfully. You can now sign in."
+        )
+
+        return redirect("signin")
 
     except EmailVerification.DoesNotExist:
         messages.error(request, "Invalid verification link.")
-        return redirect('signin')
+        return redirect("signin")
 
 
 def resend_verification_email(request):
