@@ -212,13 +212,7 @@ def send_password_changed_email(user):
 
 
 
-
 def send_new_signup_admin_email(user):
-    print("========================================")
-    print("🔥 ADMIN SIGNUP EMAIL FUNCTION CALLED")
-    print("🔥 TO:", settings.ADMIN_NOTIFICATION_EMAIL)
-    print("🔥 FROM:", settings.DEFAULT_FROM_EMAIL)
-
     url = "https://api.brevo.com/v3/smtp/email"
 
     headers = {
@@ -240,29 +234,9 @@ def send_new_signup_admin_email(user):
         "htmlContent": f"""
             <h2>New User Registration</h2>
 
-            <p>A new user has verified their email address and activated their SJS Company account.</p>
+            <p>A new user has verified their email address and activated their account.</p>
 
-            <table border="1" cellpadding="8" cellspacing="0">
-                <tr>
-                    <td><b>First Name</b></td>
-                    <td>{user.first_name}</td>
-                </tr>
-
-                <tr>
-                    <td><b>Last Name</b></td>
-                    <td>{user.last_name}</td>
-                </tr>
-
-                <tr>
-                    <td><b>Email Address</b></td>
-                    <td>{user.email}</td>
-                </tr>
-
-                <tr>
-                    <td><b>User Category</b></td>
-                    <td>{user.usercategory}</td>
-                </tr>
-            </table>
+            <p>{user.first_name}</p>
         """
     }
 
@@ -272,11 +246,9 @@ def send_new_signup_admin_email(user):
         headers=headers
     )
 
-    print("🔥 STATUS:", response.status_code)
-    print("🔥 RESPONSE:", response.text)
-    print("========================================")
+    if response.status_code != 201:
+        raise Exception(
+            f"BREVO ERROR {response.status_code}: {response.text}"
+        )
 
     return response.status_code
-
-
-
