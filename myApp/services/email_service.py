@@ -211,17 +211,90 @@ def send_password_changed_email(user):
     return response.status_code
 
 
+
+
+from myApp.models import CustomUser
+
 def send_new_signup_admin_email(user):
-    return send_brevo_email(
-        to_email="smangajsithole@gmail.com",
-        subject="New User Registration",
-        html_content=f"""
+    print("🔥 ADMIN SIGNUP EMAIL FUNCTION CALLED")
+
+    admin = CustomUser.objects.filter(
+        usercategory="admin",
+        is_active=True
+    ).first()
+
+    if not admin:
+        print("❌ No active admin found.")
+        return
+
+    print(f"🔥 ADMIN EMAIL: {admin.email}")
+
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "api-key": settings.BREVO_API_KEY,
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "sender": {
+            "name": "SJS Company Notifications",
+            "email": settings.DEFAULT_FROM_EMAIL
+        },
+        "to": [
+            {
+                "email": admin.email
+            }
+        ],
+        "subject": "New User Registration",
+        "htmlContent": f"""
             <h2>New User Registration</h2>
 
-            <p>A new user has verified their email address.</p>
+            <p>A new user has successfully verified their account.</p>
 
-            <p><b>Name:</b> {user.first_name} {user.last_name}</p>
-            <p><b>Email:</b> {user.email}</p>
-            <p><b>Role:</b> {user.usercategory}</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <tr>
+                    <td><b>First Name</b></td>
+                    <td>{user.first_name}</td>
+                </tr>
+
+                <tr>
+                    <td><b>Last Name</b></td>
+                    <td>{user.last_name}</td>
+                </tr>
+
+                <tr>
+                    <td><b>Email Address</b></td>
+                    <td>{user.email}</td>
+                </tr>
+
+                <tr>
+                    <td><b>User Category</b></td>
+                    <td>{user.usercategory}</td>
+                </tr>
+            </table>
+
+            <br>
+
+            <p>
+                This notification was generated automatically by the
+                SJS Company registration system after the user
+                successfully verified their email address.
+            </p>
         """
+    }
+
+    response = requests.post(
+        url,
+        json=data,
+        headers=headers
     )
+
+    print("🔥 ADMIN SIGNUP EMAIL STATUS:", response.status_code)
+    print("🔥 ADMIN SIGNUP EMAIL RESPONSE:", response.text)
+
+    return response.status_code
+
+
+
+
