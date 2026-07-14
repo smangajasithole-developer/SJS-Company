@@ -805,6 +805,11 @@ def adminabout(request):
             about.history_p1 = request.POST.get("history_p1")
             about.history_p2 = request.POST.get("history_p2")
             about.history_p3 = request.POST.get("history_p3")
+
+            # Mission & Vision
+            about.mission = request.POST.get("mission")
+            about.vision = request.POST.get("vision")
+
             about.save()
             return redirect('adminabout')
 
