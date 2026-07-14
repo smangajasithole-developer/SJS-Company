@@ -261,13 +261,13 @@ class JobApplication(models.Model):
 
     date_applied = models.DateTimeField(auto_now_add=True)
 
-
 # =====================================================
 # 4. HERO IMAGES (All Pages)
 # =====================================================
 
 class HeroPhoto(models.Model):
     """Hero banner images for different pages"""
+
     PAGE_CHOICES = (
         ("home", "Home"),
         ("about", "About"),
@@ -277,11 +277,16 @@ class HeroPhoto(models.Model):
     )
 
     page = models.CharField(max_length=20, choices=PAGE_CHOICES, unique=True)
-    image = models.ImageField(upload_to="hero_photos/")
+
+    # Increased max_length to accommodate long Cloudinary public IDs
+    image = models.ImageField(
+        upload_to="hero_photos/",
+        max_length=1000,
+    )
 
     def __str__(self):
         return self.page
-    
+
     class Meta:
         verbose_name = "Admin Hero Photo"
         verbose_name_plural = "Admin Hero Photos"
